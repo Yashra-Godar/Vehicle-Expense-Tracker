@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="BusinessLayer/BusinessLayer.csproj" />
+  <Project Path="DatabaseLayer/DatabaseLayer.csproj" />
+  <Project Path="Vehicle_Expense Tracker/Vehicle_Expense Tracker.csproj" />
+</Solution>
