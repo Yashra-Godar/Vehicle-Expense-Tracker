@@ -12,10 +12,15 @@ namespace BusinessLayer.Model
         {
             Crane_Vehicles = new HashSet<Crane_Vehicle>();
             Service_Masters=new HashSet<Service_Master>();
-            Vehicle_Loans = new HashSet<Vehicle_Loan>();
-            CraneOilChangesLog=new HashSet<CraneOilChangeLog>();
+            craneOtherExpenses=new HashSet<CraneOtherExpenses>();
+            Fuel_Expenses=new HashSet<Fuel_Expenses>();
+            vehicle_Loans=new HashSet<Vehicle_Loan>();
+            CraneOilChangeLogs=new HashSet<CraneOilChangeLog>();
+            crane_Insurances=new HashSet<Crane_Insurance>();
+            insurance_premiums=new HashSet<Insurance_Premium>();
 
-      
+            
+                          
         }
         public int Id { get; set; }
 
@@ -31,9 +36,23 @@ namespace BusinessLayer.Model
 
         public ICollection<Service_Master> Service_Masters { get; set; }
 
-        public ICollection<Vehicle_Loan> Vehicle_Loans { get; set; }
+        public ICollection<CraneOtherExpenses> craneOtherExpenses {  get; set; }
 
-        public ICollection<CraneOilChangeLog> CraneOilChangesLog { get; set; }
+        public ICollection<Fuel_Expenses> Fuel_Expenses { get; set; }
+
+        public ICollection<Vehicle_Loan> vehicle_Loans { get; set; }
+
+        public ICollection<CraneOilChangeLog> CraneOilChangeLogs { get; set; }
+
+        public ICollection<Crane_Insurance>crane_Insurances { get; set; }
+
+        public ICollection<Insurance_Premium>insurance_premiums {  get; set; }
+       
+
+
+        
+
+        
 
         
 

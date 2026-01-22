@@ -25,5 +25,13 @@ namespace DatabaseLayer.ApplicationContext
         public DbSet<Service_Parts> tbl_ServiceParts { get; set; }
 
         public DbSet<CraneOilChangeLog>craneOilChangeLogs { get; set; }
+
+        public DbSet<Fuel_Expenses> tbl_FuelExpenses { get; set; }
+
+        public DbSet<CraneOtherExpenses>craneOtherExpenses { get; set; }
+
+        public DbSet<Crane_Insurance>tbl_CraneInsurance { get; set; }
+
+        public DbSet<Insurance_Premium> tbl_InsurancePremium {  get; set; }
     }
 }

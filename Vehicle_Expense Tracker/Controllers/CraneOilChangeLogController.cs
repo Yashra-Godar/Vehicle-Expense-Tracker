@@ -2,6 +2,7 @@
 using BusinessLayer.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Update.Internal;
 
 namespace Vehicle_Expense_Tracker.Controllers
 {
@@ -12,7 +13,7 @@ namespace Vehicle_Expense_Tracker.Controllers
         private readonly ICraneOilChangeLog _changeLog;
         public CraneOilChangeLogController(ICraneOilChangeLog changeLog)
         {
-            _changeLog=changeLog;
+            _changeLog = changeLog;
         }
 
         [HttpPost("Save")]
@@ -32,8 +33,75 @@ namespace Vehicle_Expense_Tracker.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new ResponseResult("Internal Error", ex.Message));
+                return StatusCode(500, new ResponseResult("Internal Server Error", ex.Message));
+               
             }
         }
+
+        [HttpPut("Update/{Id}")]
+
+        public async Task<IActionResult> UpdateCraneOilChange(int Id, CraneOilChangeLog craneOilChangeLog)
+        {
+            try
+            {
+                var result=await _changeLog.UpdateCraneOilChange(Id, craneOilChangeLog);
+                if (result.status == "OK")
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ResponseResult("Internal Server Error", ex.Message));
+            }
+        }
+
+        [HttpDelete("Delete/{Id}")]
+        public async Task<IActionResult>DeleteCraneOilChange(int Id)
+        {
+            try
+            {
+                var result = await _changeLog.DeleteCraneOilChange(Id);
+                if (result.status == "OK")
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ResponseResult("Internal Server Error", ex.Message));
+            }
+
+        }
+        [HttpGet("List")]
+        public async Task<IActionResult> ListCraneOilChange()
+        {
+            try
+            {
+                var result = await _changeLog.ListOilChange();
+                if (result.status == "OK")
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ResponseResult("Internal Server Error", ex.Message));
+            }
+
+        }
+    
     }
 }

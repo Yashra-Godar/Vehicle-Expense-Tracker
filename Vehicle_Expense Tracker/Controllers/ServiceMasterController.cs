@@ -31,7 +31,7 @@ namespace Vehicle_Expense_Tracker.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new ResponseResult("Fail", ex.Message));
+                return StatusCode(500, new ResponseResult("Internal Server Error", ex.Message));
             }
         }
         [HttpPut("Update/{Id}")]
@@ -53,7 +53,7 @@ namespace Vehicle_Expense_Tracker.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new ResponseResult("Fail", ex.Message));
+                return StatusCode(500, new ResponseResult("Internal Server Error", ex.Message));
             }
         }
 
@@ -75,7 +75,7 @@ namespace Vehicle_Expense_Tracker.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new ResponseResult("Fail", ex.Message));
+                return StatusCode(500, new ResponseResult("Internal Server Error", ex.Message));
             }
 
         }
@@ -99,7 +99,7 @@ namespace Vehicle_Expense_Tracker.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new ResponseResult("Fail", ex.Message));
+                return StatusCode(500, new ResponseResult("Internal Server Error", ex.Message));
             }
         }
     }

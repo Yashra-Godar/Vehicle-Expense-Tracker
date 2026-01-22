@@ -2,25 +2,25 @@
 using BusinessLayer.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Update.Internal;
 
 namespace Vehicle_Expense_Tracker.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ServicePartsController : ControllerBase
+    public class FuelExpensesController : ControllerBase
     {
-        private readonly IService_Parts _Parts;
-        public ServicePartsController(IService_Parts Parts)
+        private readonly IFuel_Expenses _Expenses;
+        public FuelExpensesController(IFuel_Expenses Expenses)
         {
-            _Parts = Parts;
+            _Expenses = Expenses;
         }
-
         [HttpPost("Save")]
-        public async Task<IActionResult> SaveService_Parts(Service_Parts service_Parts)
+        public async Task<IActionResult> SaveFuel_Expenses(Fuel_Expenses FuelExpenses)
         {
             try
             {
-                var result=await _Parts.SaveService_Parts(service_Parts);
+                var result = await _Expenses.SaveFuel_Expenses(FuelExpenses);
                 if (result != null)
                 {
                     return Ok(result);
@@ -29,20 +29,21 @@ namespace Vehicle_Expense_Tracker.Controllers
                 {
                     return BadRequest(result);
                 }
+
             }
             catch (Exception ex)
             {
                 return StatusCode(500, new ResponseResult("Internal Server Error", ex.Message));
+                
             }
         }
 
         [HttpPut("Update/{Id}")]
-
-        public async Task<IActionResult>UpdateService_Parts(int Id, Service_Parts service_Parts)
+        public async Task<IActionResult> UpdateFuel_Expenses(int Id, Fuel_Expenses fuel_Expenses)
         {
             try
             {
-                var result=await _Parts.UpdateService_Parts(Id, service_Parts);
+                var result = await _Expenses.UpdateFuel_Expenses(Id, fuel_Expenses);
                 if (result.status == "OK")
                 {
                     return Ok(result);
@@ -51,21 +52,23 @@ namespace Vehicle_Expense_Tracker.Controllers
                 {
                     return BadRequest(result);
                 }
+
+
             }
             catch (Exception ex)
             {
                 return StatusCode(500, new ResponseResult("Internal Server Error", ex.Message));
+                
             }
-
         }
 
         [HttpDelete("Delete/{Id}")]
 
-        public async Task<IActionResult> DeleteService_Parts(int Id)
+        public async Task<IActionResult> DeleteFuel_Expenses(int Id)
         {
             try
             {
-                var result = await _Parts.DeleteService_Parts(Id);
+                var result = await _Expenses.DeleteFuel_Expenses(Id);
                 if (result.status == "OK")
                 {
                     return Ok(result);
@@ -74,21 +77,21 @@ namespace Vehicle_Expense_Tracker.Controllers
                 {
                     return BadRequest(result);
                 }
+
             }
             catch (Exception ex)
             {
                 return StatusCode(500, new ResponseResult("Internal Server Error", ex.Message));
             }
-
         }
 
         [HttpGet("List")]
 
-        public async Task<IActionResult>ListService_Parts()
+        public async Task<IActionResult>ListFuel_Expenses()
         {
             try
             {
-                var result= await _Parts.ListService_Parts();
+                var result= await _Expenses.ListFuel_Expenses();
                 if (result.status == "OK")
                 {
                     return Ok(result);
@@ -102,10 +105,6 @@ namespace Vehicle_Expense_Tracker.Controllers
             {
                 return StatusCode(500, new ResponseResult("Internal Server Error", ex.Message));
             }
-
         }
-
     }
-            
-    
 }

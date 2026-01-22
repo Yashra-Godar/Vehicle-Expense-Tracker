@@ -4,6 +4,7 @@ using DatabaseLayer.ApplicationContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DatabaseLayer.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20260121135225_ini_migration")]
+    partial class ini_migration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,6 +39,9 @@ namespace DatabaseLayer.Migrations
                     b.Property<string>("Changed_By")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Crane_VehicleId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("Created_At")
                         .HasColumnType("datetime2");
@@ -64,12 +70,9 @@ namespace DatabaseLayer.Migrations
                     b.Property<decimal>("Unit")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("Vehicle_TypeId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("Vehicle_TypeId");
+                    b.HasIndex("Crane_VehicleId");
 
                     b.ToTable("craneOilChangeLogs");
                 });
@@ -84,6 +87,9 @@ namespace DatabaseLayer.Migrations
 
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Crane_VehicleId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("Created_At")
                         .HasColumnType("datetime2");
@@ -108,68 +114,11 @@ namespace DatabaseLayer.Migrations
                     b.Property<string>("Reference_No")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Vehicle_TypeId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("Vehicle_TypeId");
+                    b.HasIndex("Crane_VehicleId");
 
                     b.ToTable("craneOtherExpenses");
-                });
-
-            modelBuilder.Entity("BusinessLayer.Model.Crane_Insurance", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Agent_ContactNo")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Agent_Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Created_At")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("End_Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Insurance_Company")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Policy_No")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Policy_Type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("Premium_Amount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("Premium_Frequency")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("Remarks")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Start_Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Vehicle_TypeId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Vehicle_TypeId");
-
-                    b.ToTable("tbl_CraneInsurance");
                 });
 
             modelBuilder.Entity("BusinessLayer.Model.Crane_Vehicle", b =>
@@ -245,6 +194,9 @@ namespace DatabaseLayer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("Crane_VehicleId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("Created_At")
                         .HasColumnType("datetime2");
 
@@ -283,59 +235,11 @@ namespace DatabaseLayer.Migrations
                     b.Property<DateTime>("Updated_At")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Vehicle_TypeId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("Vehicle_TypeId");
+                    b.HasIndex("Crane_VehicleId");
 
                     b.ToTable("tbl_FuelExpenses");
-                });
-
-            modelBuilder.Entity("BusinessLayer.Model.Insurance_Premium", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("Amount_Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Crane_InsuranceId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Created_At")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Paid_To")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Payment_Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Payment_Mode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Premium_Month")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Remarks")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Vehicle_TypeId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Crane_InsuranceId");
-
-                    b.HasIndex("Vehicle_TypeId");
-
-                    b.ToTable("tbl_InsurancePremium");
                 });
 
             modelBuilder.Entity("BusinessLayer.Model.Loan_Installment", b =>
@@ -479,6 +383,9 @@ namespace DatabaseLayer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Crane_VehicleId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("Created_At")
                         .HasColumnType("datetime2");
 
@@ -507,12 +414,9 @@ namespace DatabaseLayer.Migrations
                     b.Property<DateTime>("Updated_At")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Vehicle_TypeId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("Vehicle_TypeId");
+                    b.HasIndex("Crane_VehicleId");
 
                     b.ToTable("tbl_VehicleLoan");
                 });
@@ -536,35 +440,24 @@ namespace DatabaseLayer.Migrations
 
             modelBuilder.Entity("BusinessLayer.Model.CraneOilChangeLog", b =>
                 {
-                    b.HasOne("BusinessLayer.Model.Vehicle_Type", "Vehicle_Type")
-                        .WithMany("CraneOilChangeLogs")
-                        .HasForeignKey("Vehicle_TypeId")
+                    b.HasOne("BusinessLayer.Model.Crane_Vehicle", "Crane_Vehicle")
+                        .WithMany("CraneOilChanges")
+                        .HasForeignKey("Crane_VehicleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Vehicle_Type");
+                    b.Navigation("Crane_Vehicle");
                 });
 
             modelBuilder.Entity("BusinessLayer.Model.CraneOtherExpenses", b =>
                 {
-                    b.HasOne("BusinessLayer.Model.Vehicle_Type", "Vehicle_Type")
-                        .WithMany("craneOtherExpenses")
-                        .HasForeignKey("Vehicle_TypeId")
+                    b.HasOne("BusinessLayer.Model.Crane_Vehicle", "Crane_Vehicle")
+                        .WithMany("craneOtherExpense")
+                        .HasForeignKey("Crane_VehicleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Vehicle_Type");
-                });
-
-            modelBuilder.Entity("BusinessLayer.Model.Crane_Insurance", b =>
-                {
-                    b.HasOne("BusinessLayer.Model.Vehicle_Type", "VehicleType")
-                        .WithMany("crane_Insurances")
-                        .HasForeignKey("Vehicle_TypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("VehicleType");
+                    b.Navigation("Crane_Vehicle");
                 });
 
             modelBuilder.Entity("BusinessLayer.Model.Crane_Vehicle", b =>
@@ -580,32 +473,13 @@ namespace DatabaseLayer.Migrations
 
             modelBuilder.Entity("BusinessLayer.Model.Fuel_Expenses", b =>
                 {
-                    b.HasOne("BusinessLayer.Model.Vehicle_Type", "Vehicle_Type")
+                    b.HasOne("BusinessLayer.Model.Crane_Vehicle", "Crane_Vehicle")
                         .WithMany("Fuel_Expenses")
-                        .HasForeignKey("Vehicle_TypeId")
+                        .HasForeignKey("Crane_VehicleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Vehicle_Type");
-                });
-
-            modelBuilder.Entity("BusinessLayer.Model.Insurance_Premium", b =>
-                {
-                    b.HasOne("BusinessLayer.Model.Crane_Insurance", "Crane_Insurance")
-                        .WithMany("insurance_Premium")
-                        .HasForeignKey("Crane_InsuranceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BusinessLayer.Model.Vehicle_Type", "Vehicle_Type")
-                        .WithMany("insurance_premiums")
-                        .HasForeignKey("Vehicle_TypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Crane_Insurance");
-
-                    b.Navigation("Vehicle_Type");
+                    b.Navigation("Crane_Vehicle");
                 });
 
             modelBuilder.Entity("BusinessLayer.Model.Loan_Installment", b =>
@@ -643,18 +517,24 @@ namespace DatabaseLayer.Migrations
 
             modelBuilder.Entity("BusinessLayer.Model.Vehicle_Loan", b =>
                 {
-                    b.HasOne("BusinessLayer.Model.Vehicle_Type", "Vehicle_Type")
-                        .WithMany("vehicle_Loans")
-                        .HasForeignKey("Vehicle_TypeId")
+                    b.HasOne("BusinessLayer.Model.Crane_Vehicle", "Crane_Vehicle")
+                        .WithMany("Vehicle_Loans")
+                        .HasForeignKey("Crane_VehicleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Vehicle_Type");
+                    b.Navigation("Crane_Vehicle");
                 });
 
-            modelBuilder.Entity("BusinessLayer.Model.Crane_Insurance", b =>
+            modelBuilder.Entity("BusinessLayer.Model.Crane_Vehicle", b =>
                 {
-                    b.Navigation("insurance_Premium");
+                    b.Navigation("CraneOilChanges");
+
+                    b.Navigation("Fuel_Expenses");
+
+                    b.Navigation("Vehicle_Loans");
+
+                    b.Navigation("craneOtherExpense");
                 });
 
             modelBuilder.Entity("BusinessLayer.Model.Service_Master", b =>
@@ -669,21 +549,9 @@ namespace DatabaseLayer.Migrations
 
             modelBuilder.Entity("BusinessLayer.Model.Vehicle_Type", b =>
                 {
-                    b.Navigation("CraneOilChangeLogs");
-
                     b.Navigation("Crane_Vehicles");
 
-                    b.Navigation("Fuel_Expenses");
-
                     b.Navigation("Service_Masters");
-
-                    b.Navigation("craneOtherExpenses");
-
-                    b.Navigation("crane_Insurances");
-
-                    b.Navigation("insurance_premiums");
-
-                    b.Navigation("vehicle_Loans");
                 });
 #pragma warning restore 612, 618
         }

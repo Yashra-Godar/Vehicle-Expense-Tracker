@@ -7,20 +7,19 @@ namespace Vehicle_Expense_Tracker.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ServicePartsController : ControllerBase
+    public class InsurancePremiumController : ControllerBase
     {
-        private readonly IService_Parts _Parts;
-        public ServicePartsController(IService_Parts Parts)
+        private readonly IInsurance_Premium _Premium;
+        public InsurancePremiumController(IInsurance_Premium Premium)
         {
-            _Parts = Parts;
+            _Premium= Premium;
         }
-
         [HttpPost("Save")]
-        public async Task<IActionResult> SaveService_Parts(Service_Parts service_Parts)
+        public async Task<IActionResult>SaveInsurance_Premium(Insurance_Premium insurance_Premium)
         {
             try
             {
-                var result=await _Parts.SaveService_Parts(service_Parts);
+                var result= await _Premium.SaveInsurance_Premium(insurance_Premium);
                 if (result != null)
                 {
                     return Ok(result);
@@ -33,16 +32,17 @@ namespace Vehicle_Expense_Tracker.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, new ResponseResult("Internal Server Error", ex.Message));
+
             }
+
         }
 
         [HttpPut("Update/{Id}")]
-
-        public async Task<IActionResult>UpdateService_Parts(int Id, Service_Parts service_Parts)
+        public async Task<IActionResult>UpdateInsurance_Premium(int Id,Insurance_Premium insurance_Premium)
         {
             try
             {
-                var result=await _Parts.UpdateService_Parts(Id, service_Parts);
+                var result= await _Premium.UpdateInsurance_Premium(Id, insurance_Premium);
                 if (result.status == "OK")
                 {
                     return Ok(result);
@@ -51,21 +51,22 @@ namespace Vehicle_Expense_Tracker.Controllers
                 {
                     return BadRequest(result);
                 }
+
             }
             catch (Exception ex)
             {
                 return StatusCode(500, new ResponseResult("Internal Server Error", ex.Message));
-            }
 
+            }
         }
 
-        [HttpDelete("Delete/{Id}")]
 
-        public async Task<IActionResult> DeleteService_Parts(int Id)
+        [HttpDelete("Delete/{Id}")]
+        public async Task<IActionResult>DeleteInsurance_Premium(int Id)
         {
             try
             {
-                var result = await _Parts.DeleteService_Parts(Id);
+                var result=await _Premium.DeleteInsurance_Premium(Id);
                 if (result.status == "OK")
                 {
                     return Ok(result);
@@ -74,21 +75,21 @@ namespace Vehicle_Expense_Tracker.Controllers
                 {
                     return BadRequest(result);
                 }
+
             }
             catch (Exception ex)
             {
                 return StatusCode(500, new ResponseResult("Internal Server Error", ex.Message));
-            }
 
+            }
         }
 
         [HttpGet("List")]
-
-        public async Task<IActionResult>ListService_Parts()
+        public async Task<IActionResult> ListInsurance_Premium()
         {
             try
             {
-                var result= await _Parts.ListService_Parts();
+                var result= await _Premium.ListInsurance_Premium();
                 if (result.status == "OK")
                 {
                     return Ok(result);
@@ -97,15 +98,16 @@ namespace Vehicle_Expense_Tracker.Controllers
                 {
                     return BadRequest(result);
                 }
+
             }
             catch (Exception ex)
             {
                 return StatusCode(500, new ResponseResult("Internal Server Error", ex.Message));
-            }
 
+            }
         }
 
+
+
     }
-            
-    
 }

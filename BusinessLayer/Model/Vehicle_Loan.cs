@@ -12,7 +12,7 @@ namespace BusinessLayer.Model
         }
         public int Id { get; set; }
 
-        public virtual Vehicle_Type? VehicleType { get; set; }
+        public virtual Vehicle_Type? Vehicle_Type { get; set; }
 
         public int Vehicle_TypeId { get; set; }
 

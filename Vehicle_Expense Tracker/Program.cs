@@ -9,6 +9,11 @@ builder.Services.AddScoped<IService_Master,Service_MasterRepositories>();
 builder.Services.AddScoped<IVehicle_Loan,Vehicle_LoanRepositories>();
 builder.Services.AddScoped<ILoan_Installment,Loan_InstallmentRepositories>();
 builder.Services.AddScoped<IService_Parts,Service_PartsRepositories>();
+builder.Services.AddScoped<ICraneOilChangeLog,CraneOilChangeLogRepositories>();
+builder.Services.AddScoped<IFuel_Expenses,Fuel_ExpensesRepositories>();
+builder.Services.AddScoped<ICraneOtherExpenses, CraneOtherExpensesRepositories>();
+builder.Services.AddScoped<ICrane_Insurance, Crane_InsuranceRepositories>();
+builder.Services.AddScoped<IInsurance_Premium, InsurancePremiumRepositories>();
 builder.Services.AddDBService();
 
 // Add services to the container.

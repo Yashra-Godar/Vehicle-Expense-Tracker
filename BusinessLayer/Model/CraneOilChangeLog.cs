@@ -16,6 +16,8 @@ namespace BusinessLayer.Model
 
         public string Oil_Brand { get; set; } = string.Empty;
 
+        public int Oil_Qty { get; set; }
+
         public decimal Unit { get; set; }
 
         public decimal Meter_Reading { get; set; }

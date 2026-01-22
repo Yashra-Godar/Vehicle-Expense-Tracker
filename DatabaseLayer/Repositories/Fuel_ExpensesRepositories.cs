@@ -8,23 +8,24 @@ using System.Text;
 
 namespace DatabaseLayer.Repositories
 {
-    public class Vehicle_LoanRepositories : IVehicle_Loan
+    public class Fuel_ExpensesRepositories : IFuel_Expenses
     {
         private readonly ApplicationDBContext _dbContext;
-        public Vehicle_LoanRepositories(ApplicationDBContext dbContext)
+        public Fuel_ExpensesRepositories(ApplicationDBContext dbContext)
         {
             _dbContext = dbContext;
         }
-        public async Task<ResponseResult> DeleteVehicle_Loan(int Id)
+        public async Task<ResponseResult> DeleteFuel_Expenses(int Id)
         {
             try
             {
-                var result = await _dbContext.tbl_VehicleLoan.FindAsync(Id);
+                var result = await _dbContext.tbl_FuelExpenses.FindAsync(Id);
                 if (result != null)
                 {
-                    _dbContext.tbl_VehicleLoan.Remove(result);
+                    _dbContext.tbl_FuelExpenses.Remove(result);
                     await _dbContext.SaveChangesAsync();
-                    return new ResponseResult("OK", "Data Removed Successfully");
+                    return new ResponseResult("OK", "Data Deleted Successfully");
+
                 }
                 else
                 {
@@ -37,12 +38,12 @@ namespace DatabaseLayer.Repositories
             }
         }
 
-        public async Task<ResponseResult> ListVehicle_Loan()
+        public async Task<ResponseResult> ListFuel_Expenses()
         {
             try
             {
-                var result=await _dbContext.tbl_VehicleLoan.ToListAsync();
-                return new ResponseResult("OK", result);            
+                var result = await _dbContext.tbl_FuelExpenses.ToListAsync();
+                return new ResponseResult("OK", result);
             }
             catch (Exception ex)
             {
@@ -50,18 +51,20 @@ namespace DatabaseLayer.Repositories
             }
         }
 
-        public async Task<ResponseResult> SaveVehicle_Loan(Vehicle_Loan vehicle_loan)
+        public async Task<ResponseResult> SaveFuel_Expenses(Fuel_Expenses fuel_Expenses)
         {
             try
             {
                 List<string> error = new List<string>();
-                if (!await _dbContext.tbl_Vehicles.AnyAsync(o => o.Id == vehicle_loan.Vehicle_TypeId))
+                if (!await _dbContext.tbl_Vehicles.AnyAsync(o => o.Id == fuel_Expenses.Vehicle_TypeId))
                 {
                     error.Add("VehicleType_Id does not exist");
                 }
+                var result = await _dbContext.tbl_FuelExpenses.ToListAsync();
+             
                 if (error.Count == 0)
                 {
-                    await _dbContext.tbl_VehicleLoan.AddAsync(vehicle_loan);
+                    await _dbContext.tbl_FuelExpenses.AddAsync(fuel_Expenses);
                     await _dbContext.SaveChangesAsync();
                     return new ResponseResult("OK", "Data Inserted Successfully");
                 }
@@ -69,51 +72,52 @@ namespace DatabaseLayer.Repositories
                 {
                     return new ResponseResult("Fail", error);
                 }
-
             }
             catch (Exception ex)
+
+
             {
                 return new ResponseResult("Fail", ex.Message);
             }
+
         }
 
-        public async Task<ResponseResult> UpdateVehicle_Loan(int Id, Vehicle_Loan vehicle_loan)
+
+        public async Task<ResponseResult> UpdateFuel_Expenses(int Id, Fuel_Expenses fuel_Expenses)
         {
             try
             {
-                var result = await _dbContext.tbl_VehicleLoan.FindAsync(Id);
+                var result = await _dbContext.tbl_FuelExpenses.FindAsync(Id);
                 if (result != null)
                 {
-                    if (!await _dbContext.tbl_Vehicles.AnyAsync(o => o.Id == vehicle_loan.Vehicle_TypeId))
+                    if (!await _dbContext.tbl_Vehicles.AnyAsync(o => o.Id == fuel_Expenses.Vehicle_TypeId))
                     {
                         return new ResponseResult("Fail", "Vehicle_Type id not exists");
                     }
-                    result.Vehicle_TypeId = vehicle_loan.Vehicle_TypeId;
-                    result.Loan_Provider = vehicle_loan.Loan_Provider;
-                    result.Loan_Amount = vehicle_loan.Loan_Amount;
-                    result.Interest_Rate = vehicle_loan.Interest_Rate;
-                    result.Term_Month = vehicle_loan.Term_Month;
-                    result.Start_Date = vehicle_loan.Start_Date;
-                    result.Monthly_Installment = vehicle_loan.Monthly_Installment;
-                    result.Status = vehicle_loan.Status;
-                    result.Contact_Detail = vehicle_loan.Contact_Detail;
-                    result.Updated_At = vehicle_loan.Updated_At;
+                    result.Vehicle_TypeId = fuel_Expenses.Vehicle_TypeId;
+                    result.Fuel_Date = fuel_Expenses.Fuel_Date;
+                    result.Fuel_Source = fuel_Expenses.Fuel_Source;
+                    result.Fuel_Qty = fuel_Expenses.Fuel_Qty;
+                    result.Rate = fuel_Expenses.Rate;
+                    result.Odometer_Reading = fuel_Expenses.Odometer_Reading;
+                    result.Payment_Method = fuel_Expenses.Payment_Method;
+                    result.Receipt_No = fuel_Expenses.Receipt_No;
+                    result.Remarks = fuel_Expenses.Remarks;
+                    result.Updated_At = fuel_Expenses.Updated_At;
 
                     await _dbContext.SaveChangesAsync();
-
                     return new ResponseResult("OK", "Data Updated Successfully");
+
                 }
                 else
                 {
                     return new ResponseResult("Fail", "Data not Found");
                 }
             }
-
             catch (Exception ex)
             {
                 return new ResponseResult("Fail", ex.Message);
             }
-
         }
     }
 }
