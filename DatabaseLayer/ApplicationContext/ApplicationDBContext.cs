@@ -33,5 +33,9 @@ namespace DatabaseLayer.ApplicationContext
         public DbSet<Crane_Insurance>tbl_CraneInsurance { get; set; }
 
         public DbSet<Insurance_Premium> tbl_InsurancePremium {  get; set; }
+
+        public DbSet<Staff_Master> tbl_Staff_Master { get;set; }
+
+        public DbSet<Admin_Master> tbl_Admin_Master { get; set;}
     }
 }

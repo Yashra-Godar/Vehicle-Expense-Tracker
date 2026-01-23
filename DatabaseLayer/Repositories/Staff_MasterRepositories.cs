@@ -1,0 +1,118 @@
+﻿using BusinessLayer.Interface;
+using BusinessLayer.Model;
+using DatabaseLayer.ApplicationContext;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Text;
+
+namespace DatabaseLayer.Repositories
+{
+    public class Staff_MasterRepositories : IStaff_Master
+    {
+        private readonly ApplicationDBContext _dbContext;
+        public Staff_MasterRepositories(ApplicationDBContext dbContext)
+        {
+            _dbContext= dbContext;
+        }
+        public async Task<ResponseResult> DeleteStaff_Master(int Id)
+        {
+            try
+            {
+                
+                    var result = await _dbContext.tbl_Staff_Master.FindAsync(Id);
+                    if (result != null)
+                    {
+                       _dbContext.tbl_Staff_Master.Remove(result);
+                      await _dbContext.SaveChangesAsync();
+                      return new ResponseResult("OK", "Data Deleted Successfully");
+                    }
+                    else
+                    {
+                        return new ResponseResult("Fail", "Not Found");
+                    }
+                
+            }
+            catch (Exception ex)
+            {
+                return new ResponseResult("Fail", ex.Message);
+            }
+
+        }
+
+        public async Task<ResponseResult> ListStaff_Master()
+        {
+            try
+            {
+                var result= await _dbContext.tbl_Staff_Master.ToListAsync();
+                await _dbContext.SaveChangesAsync();
+                return new ResponseResult("OK", result);
+            }
+            catch (Exception ex)
+            {
+                return new ResponseResult("Fail", ex.Message);
+            }
+        }
+
+        public async Task<ResponseResult> SaveStaff_Master(Staff_Master staff_master)
+        {
+            try
+            { 
+                List<string>error=new List<string>();
+                var result=  await _dbContext.tbl_Staff_Master.ToListAsync();   
+                if (result.Any(o=>o.ContactNo==staff_master.ContactNo))
+                {
+                    error.Add("ContactNo already exists!");
+                }
+                if (result.Any(o => o.Email == staff_master.Email))
+                {
+                    error.Add("Email already exists!");
+                }
+                if (error.Count == 0)
+                {
+                    await _dbContext.tbl_Staff_Master.AddAsync(staff_master);
+                    await _dbContext.SaveChangesAsync();
+                    return new ResponseResult("OK", "Data Inserted Successfully");
+                }
+                else
+                {
+                    return new ResponseResult("Fail", error);
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ResponseResult("Fail", ex.Message);
+            }
+
+        }
+
+        public async Task<ResponseResult> UpdateStaff_Master(int Id, Staff_Master staff_master)
+        {
+            try
+            {
+                var result = await _dbContext.tbl_Staff_Master.FindAsync(Id);
+                if (result != null)
+                {
+                    result.FullName= staff_master.FullName;
+                    result.ContactNo=staff_master.ContactNo;
+                    result.Email= staff_master.Email;
+                    result.Password= staff_master.Password;
+                    result.IsActive=staff_master.IsActive;
+                    
+                    await _dbContext.SaveChangesAsync();
+                    return new ResponseResult("OK", "Data Updated Successfully");
+                }
+                else
+                {
+                    return new ResponseResult("Fail", "Data not Found");
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ResponseResult("Fail", ex.Message);
+            }
+
+        }
+    }
+}

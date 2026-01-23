@@ -74,7 +74,7 @@ namespace DatabaseLayer.Repositories
                 {
                     await _dbContext.tbl_CraneVehicle.AddAsync(crane_Vehicle);
                     await _dbContext.SaveChangesAsync();
-                    return new ResponseResult("OK", crane_Vehicle);
+                    return new ResponseResult("OK", "Data Inserted Successfully");
                 }
                 else
                 {

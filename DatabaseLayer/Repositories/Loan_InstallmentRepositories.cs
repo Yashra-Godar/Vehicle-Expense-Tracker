@@ -66,7 +66,7 @@ namespace DatabaseLayer.Repositories
                 {
                     await _dbContext.tbl_LoanInstallment.AddAsync(loan_installment);
                     await _dbContext.SaveChangesAsync();
-                    return new ResponseResult("OK", loan_installment);
+                    return new ResponseResult("OK", "Data Inserted Successfully");
                 }
                 else
                 {

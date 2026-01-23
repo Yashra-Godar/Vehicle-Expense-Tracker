@@ -14,6 +14,8 @@ builder.Services.AddScoped<IFuel_Expenses,Fuel_ExpensesRepositories>();
 builder.Services.AddScoped<ICraneOtherExpenses, CraneOtherExpensesRepositories>();
 builder.Services.AddScoped<ICrane_Insurance, Crane_InsuranceRepositories>();
 builder.Services.AddScoped<IInsurance_Premium, InsurancePremiumRepositories>();
+builder.Services.AddScoped<IStaff_Master,Staff_MasterRepositories>();
+builder.Services.AddScoped<IAdmin_Master,Admin_MasterRepositories>();
 builder.Services.AddDBService();
 
 // Add services to the container.

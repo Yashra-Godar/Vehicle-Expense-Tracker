@@ -68,7 +68,7 @@ namespace DatabaseLayer.Repositories
                 {
                     await _dbContext.tbl_ServiceMaster.AddAsync(service);
                     await _dbContext.SaveChangesAsync();
-                    return new ResponseResult("OK", service);
+                    return new ResponseResult("OK", "Data Inserted Successfully");
                 }
                 else
                 {

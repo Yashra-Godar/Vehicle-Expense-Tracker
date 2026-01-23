@@ -18,8 +18,6 @@ namespace DatabaseLayer.Repositories
             _dbContext = dbContext;
         }
 
-        public static int Id { get; internal set; }
-
         public async Task<ResponseResult> DeleteVehicle_Type(int Id)
         {
             try
@@ -62,23 +60,12 @@ namespace DatabaseLayer.Repositories
         {
             try
             {
-                var result = await _dbContext.tbl_Vehicles.ToListAsync();
-                List<string> error = new List<string>();
-                if (result.Any(o => o.TypeName == vehicle_Type.TypeName))
-                {
-                    error.Add("TypeName already exist");
-                }
-                if (error.Count == 0)
-                {
-                    await _dbContext.tbl_Vehicles.AddAsync(vehicle_Type);
-                    await _dbContext.SaveChangesAsync();
-                    return new ResponseResult("OK", vehicle_Type);
-                }
-                else
-                {
-                    return new ResponseResult("Fail", error);
-                }
+                 _dbContext.tbl_Vehicles.Add(vehicle_Type);
+                  await _dbContext.SaveChangesAsync();
+                  return new ResponseResult("OK", "Data Inserted Successfully");
             }
+                
+            
             catch (Exception ex)
             {
                 return new ResponseResult("Fail",ex.Message);
@@ -95,7 +82,6 @@ namespace DatabaseLayer.Repositories
                     result.TypeName = vehicle_Type.TypeName;
                     await _dbContext.SaveChangesAsync();
 
-                    _dbContext.tbl_Vehicles.Update(vehicle_Type);
                     return new ResponseResult("OK", "Data Updated Successfully");
                 }
                 else

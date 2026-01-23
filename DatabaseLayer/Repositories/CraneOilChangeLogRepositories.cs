@@ -68,7 +68,7 @@ namespace DatabaseLayer.Repositories
                 {
                     await _dbContext.craneOilChangeLogs.AddAsync(craneOilChangeLog);
                     await _dbContext.SaveChangesAsync();
-                    return new ResponseResult("OK", craneOilChangeLog);
+                    return new ResponseResult("OK", "Data Inserted Successfully");
                 }
                 else
                 {
