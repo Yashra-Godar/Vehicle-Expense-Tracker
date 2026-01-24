@@ -42,7 +42,23 @@ namespace DatabaseLayer.Repositories
         {
             try
             {
-                var result = await _dbContext.tbl_FuelExpenses.ToListAsync();
+                var result = await _dbContext.tbl_FuelExpenses.Select(o=> new
+                {
+                    o.Id,
+                    o.Vehicle_TypeId,
+                    o.Vehicle_Type!.TypeName,
+                    o.Staff_MasterId,
+                    o.Staff_Master!.FullName,
+                    o.Fuel_Date,
+                    o.Fuel_Source,
+                    o.Fuel_Station,
+                    o.Fuel_Qty,
+                    o.Rate,
+                    o.Odometer_Reading,
+                    o.Payment_Method,
+                    o.Receipt_No,
+                    o.Remarks
+                }).ToListAsync();
                 return new ResponseResult("OK", result);
             }
             catch (Exception ex)
@@ -60,6 +76,11 @@ namespace DatabaseLayer.Repositories
                 {
                     error.Add("VehicleType_Id does not exist");
                 }
+                if (!await _dbContext.tbl_Staff_Master.AnyAsync(o => o.Id == fuel_Expenses.Staff_MasterId))
+                {
+                    error.Add("StaffMaster_Id does not exist");
+                }
+
                 var result = await _dbContext.tbl_FuelExpenses.ToListAsync();
              
                 if (error.Count == 0)
@@ -92,9 +113,14 @@ namespace DatabaseLayer.Repositories
                 {
                     if (!await _dbContext.tbl_Vehicles.AnyAsync(o => o.Id == fuel_Expenses.Vehicle_TypeId))
                     {
-                        return new ResponseResult("Fail", "Vehicle_Type id not exists");
+                        return new ResponseResult("Fail", "Vehicle_TypeId not exists");
+                    }
+                    if (!await _dbContext.tbl_Staff_Master.AnyAsync(o => o.Id == fuel_Expenses.Staff_MasterId))
+                    {
+                        return new ResponseResult("Fail", "Staff_MasterId not exists");
                     }
                     result.Vehicle_TypeId = fuel_Expenses.Vehicle_TypeId;
+                    result.Staff_MasterId = fuel_Expenses.Staff_MasterId;
                     result.Fuel_Date = fuel_Expenses.Fuel_Date;
                     result.Fuel_Source = fuel_Expenses.Fuel_Source;
                     result.Fuel_Qty = fuel_Expenses.Fuel_Qty;

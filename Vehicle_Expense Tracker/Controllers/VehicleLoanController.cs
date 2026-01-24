@@ -15,11 +15,11 @@ namespace Vehicle_Expense_Tracker.Controllers
             _Loan = Loan;
         }
         [HttpPost("Save")]
-        public async Task<IActionResult> SaveVehicle_Loan(Vehicle_Loan Loan)
+        public async Task<IActionResult> SaveVehicle_Loan(Vehicle_Loan vehicle_loan)
         {
             try
             {
-                var result= await _Loan.SaveVehicle_Loan(Loan);
+                var result= await _Loan.SaveVehicle_Loan(vehicle_loan);
                 if (result != null)
                 {
                     return Ok(result);
@@ -38,11 +38,11 @@ namespace Vehicle_Expense_Tracker.Controllers
 
         [HttpPut("Update/{Id}")]
 
-        public async Task<IActionResult> UpdateVehicle_Loan(int Id, Vehicle_Loan Loan)
+        public async Task<IActionResult> UpdateVehicle_Loan(int Id, Vehicle_Loan vehicle_loan)
         {
             try
             {
-                var result=await _Loan.UpdateVehicle_Loan(Id, Loan);
+                var result=await _Loan.UpdateVehicle_Loan(Id, vehicle_loan);
                 if (result.status == "OK")
                 {
                     return Ok(result);

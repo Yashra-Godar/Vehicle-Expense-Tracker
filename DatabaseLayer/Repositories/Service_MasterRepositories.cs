@@ -46,7 +46,19 @@ namespace DatabaseLayer.Repositories
         {
             try
             {
-                var result = await _dbContext.tbl_ServiceMaster.ToListAsync();
+                var result = await _dbContext.tbl_ServiceMaster.Select(o=> new
+                {
+                    o.Id,
+                    o.Vehicle_TypeId,
+                    o.VehicleType!.TypeName,
+                    o.Staff_MasterId,
+                    o.Staff_Master!.FullName,
+                    o.Service_Date,
+                    o.Service_Type,
+                    o.Performed_By,
+                    o.Remark,
+                    o.Cost
+                }).ToListAsync();
                 return new ResponseResult("OK", result);
             }
             catch (Exception ex)
@@ -63,6 +75,10 @@ namespace DatabaseLayer.Repositories
                 if (!await _dbContext.tbl_Vehicles.AnyAsync(o => o.Id == service.Vehicle_TypeId))
                 {
                     error.Add("VehicleType_Id does not exist");
+                }
+                if (!await _dbContext.tbl_Staff_Master.AnyAsync(o => o.Id == service.Staff_MasterId))
+                {
+                    error.Add("Staff_MasterId does not exist");
                 }
                 if (error.Count == 0)
                 {
@@ -93,9 +109,14 @@ namespace DatabaseLayer.Repositories
                 {
                     if (!await _dbContext.tbl_Vehicles.AnyAsync(o => o.Id == service.Vehicle_TypeId))
                     {
-                        return new ResponseResult("Fail", "Vehicle_Type id not exists");
+                        return new ResponseResult("Fail", "Vehicle_TypeId not exists");
+                    }
+                    if (!await _dbContext.tbl_Staff_Master.AnyAsync(o => o.Id == service.Staff_MasterId))
+                    {
+                        return new ResponseResult("Fail", "Staff_MasterId not exists");
                     }
                     result.Vehicle_TypeId = service.Vehicle_TypeId;
+                    result.Staff_MasterId = service.Staff_MasterId;
                     result.Service_Date= DateTime.Now;
                     result.Service_Type = service.Service_Type;
                     result.Performed_By = service.Performed_By;

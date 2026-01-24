@@ -46,7 +46,23 @@ namespace DatabaseLayer.Repositories
         {
             try
             {
-                var result = await _dbContext.craneOilChangeLogs.ToListAsync();
+                var result = await _dbContext.craneOilChangeLogs.Select(o=> new
+                {
+                    o.Id,
+                    o.Vehicle_TypeId,
+                    o.Vehicle_Type!.TypeName,
+                    o.Staff_MasterId,
+                    o.Staff_Master!.FullName,
+                    o.Oil_Type,
+                    o.Oil_Brand,
+                    o.Oil_Qty,
+                    o.Unit,
+                    o.Meter_Reading,
+                    o.Change_Date,
+                    o.NextDue_Date,
+                    o.Changed_By,
+                    o.Remarks
+                }).ToListAsync();
                 return new ResponseResult("OK", result);
             }
             catch (Exception ex)
@@ -63,6 +79,10 @@ namespace DatabaseLayer.Repositories
                 if (!await _dbContext.tbl_Vehicles.AnyAsync(o => o.Id == craneOilChangeLog.Vehicle_TypeId))
                 {
                     error.Add("Vehicle_TypeId does not exist");
+                }
+                if (!await _dbContext.tbl_Staff_Master.AnyAsync(o => o.Id == craneOilChangeLog.Staff_MasterId))
+                {
+                    error.Add("Staff_MasterId does not exist");
                 }
                 if (error.Count == 0)
                 {
@@ -94,7 +114,12 @@ namespace DatabaseLayer.Repositories
                 {
                     return new ResponseResult("Fail", "Vehicle_TypeId does not exist");
                 }
+                 if (!await _dbContext.tbl_Staff_Master.AnyAsync(o => o.Id == craneOilChangeLog.Staff_MasterId))
+                    {
+                        return new ResponseResult("Fail", "Staff_MasterId does not exist");
+                    }
                     result.Vehicle_TypeId = craneOilChangeLog.Vehicle_TypeId;
+                    result.Staff_MasterId = craneOilChangeLog.Staff_MasterId;
                     result.Oil_Type=craneOilChangeLog.Oil_Type;
                     result.Oil_Brand = craneOilChangeLog.Oil_Brand;
                     result.Oil_Qty = craneOilChangeLog.Oil_Qty;

@@ -42,7 +42,24 @@ namespace DatabaseLayer.Repositories
         {
             try
             {
-                var result = await _dbContext.tbl_CraneInsurance.ToListAsync();
+                var result = await _dbContext.tbl_CraneInsurance.Select(o=> new
+                {
+                    o.Id,
+                    o.Vehicle_TypeId,
+                    o.VehicleType!.TypeName,
+                    o.Staff_MasterId,
+                    o.Staff_Master!.FullName,
+                    o.Policy_No,
+                    o.Insurance_Company,
+                    o.Policy_Type,
+                    o.Start_Date,
+                    o.End_Date,
+                    o.Premium_Amount,
+                    o.Premium_Frequency,
+                    o.Agent_Name,
+                    o.Agent_ContactNo,
+                    o.Remarks
+                }).ToListAsync();
                 return new ResponseResult("OK", result);
             }
             catch (Exception ex)
@@ -60,6 +77,10 @@ namespace DatabaseLayer.Repositories
                 if (!await _dbContext.tbl_Vehicles.AnyAsync(o => o.Id == crane_Insurance.Vehicle_TypeId))
                 {
                     error.Add("Vehicle_TypeId does not exist");
+                }
+                if (!await _dbContext.tbl_Staff_Master.AnyAsync(o => o.Id == crane_Insurance.Staff_MasterId))
+                {
+                    error.Add("Staff_MasterId does not exist");
                 }
                 if (error.Count == 0)
                 {
@@ -91,8 +112,13 @@ namespace DatabaseLayer.Repositories
                     {
                         return new ResponseResult("Fail", "Vehicle_TypeId does not exist");
                     }
+                    if (!await _dbContext.tbl_Staff_Master.AnyAsync(o => o.Id == crane_Insurance.Staff_MasterId))
+                    {
+                        return new ResponseResult("Fail", "Staff_MasterId does not exist");
+                    }
 
                     result.Vehicle_TypeId = crane_Insurance.Vehicle_TypeId;
+                    result.Staff_MasterId = crane_Insurance.Staff_MasterId;
                     result.Policy_No=crane_Insurance.Policy_No;
                     result.Insurance_Company=crane_Insurance.Insurance_Company;
                     result.Policy_Type = crane_Insurance.Policy_Type;

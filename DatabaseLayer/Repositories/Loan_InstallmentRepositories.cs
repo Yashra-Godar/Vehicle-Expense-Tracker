@@ -43,7 +43,22 @@ namespace DatabaseLayer.Repositories
         {
             try
             {
-                var result = await _dbContext.tbl_LoanInstallment.ToListAsync();
+                var result = await _dbContext.tbl_LoanInstallment.Select(o=> new
+                {
+                    o.Id,
+                    o.Vehicle_LoanId,
+                    o.Vehicle_Loan!.Loan_Provider,
+                    o.Vehicle_Loan!.Loan_Amount,
+                    o.Vehicle_Loan!.Monthly_Installment,
+                    o.Staff_MasterId,
+                    o.Staff_Master!.FullName,
+                    o.Amount_Paid,
+                    o.Payment_Method,
+                    o.Receipt_No,
+                    o.Paid_On,
+                    o.Status,
+                    o.Note
+                }).ToListAsync();
                 return new ResponseResult("OK", result);
             }
 
@@ -61,6 +76,10 @@ namespace DatabaseLayer.Repositories
                 if (!await _dbContext.tbl_VehicleLoan.AnyAsync(o => o.Id == loan_installment.Vehicle_LoanId))
                 {
                     error.Add("Vehicle_LoanId does not exist");
+                }
+                if (!await _dbContext.tbl_Staff_Master.AnyAsync(o => o.Id == loan_installment.Staff_MasterId))
+                {
+                    error.Add("Staff_MasterId does not exist");
                 }
                 if (error.Count == 0)
                 {
@@ -91,7 +110,13 @@ namespace DatabaseLayer.Repositories
                     {
                         return new ResponseResult("Fail", "Vehicle_Type id not exists");
                     }
+                    if (!await _dbContext.tbl_Staff_Master.AnyAsync(o => o.Id == loan_installment.Staff_MasterId))
+                    {
+                        return new ResponseResult("Fail", "Vehicle_Type id not exists");
+                    }
+
                     result.Vehicle_LoanId=loan_installment.Vehicle_LoanId;
+                    result.Staff_MasterId=loan_installment.Staff_MasterId;
                     result.Installment_Date=loan_installment.Installment_Date;
                     result.Amount_Paid=loan_installment.Amount_Paid;
                     result.Payment_Method=loan_installment.Payment_Method;

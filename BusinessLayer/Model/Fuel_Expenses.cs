@@ -12,6 +12,10 @@ namespace BusinessLayer.Model
 
         public int Vehicle_TypeId { get; set; }
 
+        public virtual Staff_Master? Staff_Master { get; set; }
+
+        public int Staff_MasterId { get; set; }
+
         public DateTime Fuel_Date { get; set; }= DateTime.Now;
 
         public string Fuel_Source { get; set; } = string.Empty;

@@ -42,7 +42,23 @@ namespace DatabaseLayer.Repositories
         {
             try
             {
-                var result = await _dbContext.tbl_InsurancePremium.ToListAsync();
+                var result = await _dbContext.tbl_InsurancePremium.Select(o=> new
+                {
+                    o.Id,
+                    o.Crane_Insurance!.Insurance_Company,
+                    o.Crane_Insurance!.Policy_No,
+                    o.Crane_Insurance!.Policy_Type,
+                    o.Vehicle_TypeId,
+                    o.Vehicle_Type!.TypeName,
+                    o.Staff_MasterId,
+                    o.Staff_Master!.FullName,
+                    o.Premium_Month,
+                    o.Payment_Date,
+                    o.Amount_Date,
+                    o.Payment_Mode,
+                    o.Paid_To,
+                   o.Remarks
+                }).ToListAsync();
                 return new ResponseResult("OK", result);
             }
             catch (Exception ex)
@@ -59,6 +75,10 @@ namespace DatabaseLayer.Repositories
                 if (!await _dbContext.tbl_Vehicles.AnyAsync(o => o.Id == insurance_premium.Vehicle_TypeId))
                 {
                     error.Add("Vehicle_TypeId does not exist");
+                }
+                if (!await _dbContext.tbl_Staff_Master.AnyAsync(o => o.Id == insurance_premium.Staff_MasterId))
+                {
+                    error.Add(" Staff_MasterId does not exist");
                 }
                 if (!await _dbContext.tbl_CraneInsurance.AnyAsync(o => o.Id == insurance_premium.Crane_InsuranceId))
                 {
@@ -91,15 +111,20 @@ namespace DatabaseLayer.Repositories
                 {
                     if (!await _dbContext.tbl_Vehicles.AnyAsync(o => o.Id == insurance_premium.Vehicle_TypeId))
                     {
-                        return new ResponseResult("Fail", "Vehicle_Type id not exists");
+                        return new ResponseResult("Fail", "Vehicle_TypeId not exists");
                     }
                     if (!await _dbContext.tbl_CraneInsurance.AnyAsync(o => o.Id == insurance_premium.Crane_InsuranceId))
                     {
-                        return new ResponseResult("Fail", "Vehicle_Type id not exists");
+                        return new ResponseResult("Fail", "Crane_InsuranceId not exists");
                     }
-                   
+                    if (!await _dbContext.tbl_Staff_Master.AnyAsync(o => o.Id == insurance_premium.Staff_MasterId))
+                    {
+                        return new ResponseResult("Fail", "Staff_MasterId  not exists");
+                    }
+
                     result.Crane_InsuranceId = insurance_premium.Crane_InsuranceId;
                     result.Vehicle_TypeId = insurance_premium.Vehicle_TypeId;
+                    result.Staff_MasterId=insurance_premium.Staff_MasterId;
                     result.Premium_Month=insurance_premium.Premium_Month;
                     result.Payment_Date=insurance_premium.Payment_Date;
                     result.Amount_Date = insurance_premium.Amount_Date;

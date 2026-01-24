@@ -41,7 +41,22 @@ namespace DatabaseLayer.Repositories
         {
             try
             {
-                var result=await _dbContext.tbl_VehicleLoan.ToListAsync();
+                var result=await _dbContext.tbl_VehicleLoan.Select(o=> new
+                {
+                    o.Id,
+                    o.Vehicle_TypeId,
+                    o.Vehicle_Type!.TypeName,
+                    o.Staff_MasterId,
+                    o.Staff_Master!.FullName,
+                    o.Loan_Provider,
+                    o.Loan_Amount,
+                    o.Interest_Rate,
+                    o.Term_Month,
+                    o.Start_Date,
+                    o.Monthly_Installment,
+                    o.Status,
+                    o.Contact_Detail
+                }).ToListAsync();
                 return new ResponseResult("OK", result);            
             }
             catch (Exception ex)
@@ -58,6 +73,10 @@ namespace DatabaseLayer.Repositories
                 if (!await _dbContext.tbl_Vehicles.AnyAsync(o => o.Id == vehicle_loan.Vehicle_TypeId))
                 {
                     error.Add("VehicleType_Id does not exist");
+                }
+                if (!await _dbContext.tbl_Staff_Master.AnyAsync(o => o.Id == vehicle_loan.Staff_MasterId))
+                {
+                    error.Add("Staff_MasterId does not exist");
                 }
                 if (error.Count == 0)
                 {
@@ -86,9 +105,14 @@ namespace DatabaseLayer.Repositories
                 {
                     if (!await _dbContext.tbl_Vehicles.AnyAsync(o => o.Id == vehicle_loan.Vehicle_TypeId))
                     {
-                        return new ResponseResult("Fail", "Vehicle_Type id not exists");
+                        return new ResponseResult("Fail", "Vehicle_TypeId  does not exists");
+                    }
+                    if (!await _dbContext.tbl_Staff_Master.AnyAsync(o => o.Id == vehicle_loan.Staff_MasterId))
+                    {
+                        return new ResponseResult("Fail", " Staff_MasterId does not exists");
                     }
                     result.Vehicle_TypeId = vehicle_loan.Vehicle_TypeId;
+                    result.Staff_MasterId = vehicle_loan.Staff_MasterId;
                     result.Loan_Provider = vehicle_loan.Loan_Provider;
                     result.Loan_Amount = vehicle_loan.Loan_Amount;
                     result.Interest_Rate = vehicle_loan.Interest_Rate;

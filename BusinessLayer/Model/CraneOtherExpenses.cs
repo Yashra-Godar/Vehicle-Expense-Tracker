@@ -13,6 +13,10 @@ namespace BusinessLayer.Model
 
         public int Vehicle_TypeId { get; set; }
 
+        public virtual Staff_Master? Staff_Master { get; set; }
+
+        public int Staff_MasterId { get; set; }
+
         public string Expense_Type{ get; set; }=string.Empty;
 
         public decimal Amount { get; set; }

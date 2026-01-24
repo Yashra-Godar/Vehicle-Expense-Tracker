@@ -16,11 +16,11 @@ namespace Vehicle_Expense_Tracker.Controllers
             _Expenses = Expenses;
         }
         [HttpPost("Save")]
-        public async Task<IActionResult> SaveFuel_Expenses(Fuel_Expenses FuelExpenses)
+        public async Task<IActionResult> SaveFuel_Expenses(Fuel_Expenses fuelExpenses)
         {
             try
             {
-                var result = await _Expenses.SaveFuel_Expenses(FuelExpenses);
+                var result = await _Expenses.SaveFuel_Expenses(fuelExpenses);
                 if (result != null)
                 {
                     return Ok(result);

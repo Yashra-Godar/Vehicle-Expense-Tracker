@@ -43,7 +43,21 @@ namespace DatabaseLayer.Repositories
         {
             try
             {
-                var result = await _dbContext.craneOtherExpenses.ToListAsync();
+                var result = await _dbContext.craneOtherExpenses.Select(o => new
+                {
+                    o.Id,
+                    o.Vehicle_TypeId,
+                    o.Vehicle_Type!.TypeName,
+                    o.Staff_MasterId,
+                    o.Staff_Master!.FullName,
+                    o.Expense_Type,
+                    o.Amount,
+                    o.Expense_Date,
+                    o.Paid_To,
+                    o.Reference_No,
+                    o.Description,
+                    o.Payment_Mode
+                }).ToListAsync();
                 return new ResponseResult("OK", result);
             }
             catch (Exception ex)
@@ -62,7 +76,11 @@ namespace DatabaseLayer.Repositories
                     {
                         error.Add("Vehicle_TypeId does not exist");
                     }
-                    if (error.Count == 0)
+                    if (!await _dbContext.tbl_Staff_Master.AnyAsync(o => o.Id == craneOtherExpenses.Staff_MasterId))
+                   {
+                      error.Add("Staff_MasterId does not exist");
+                   }
+                if (error.Count == 0)
                     {
                         await _dbContext.craneOtherExpenses.AddAsync(craneOtherExpenses);
                         await _dbContext.SaveChangesAsync();
@@ -98,7 +116,12 @@ namespace DatabaseLayer.Repositories
                     {
                         return new ResponseResult("Fail", "Vehicle_TypeId does not exist");
                     }
+                    if (!await _dbContext.tbl_Staff_Master.AnyAsync(o => o.Id == craneOtherExpenses.Staff_MasterId))
+                    {
+                        return new ResponseResult("Fail", "Staff_MasterId does not exist");
+                    }
                     result.Vehicle_TypeId = craneOtherExpenses.Vehicle_TypeId;
+                    result.Staff_MasterId = craneOtherExpenses.Staff_MasterId;
                     result.Expense_Type=craneOtherExpenses.Expense_Type;
                     result.Amount = craneOtherExpenses.Amount;
                     result.Expense_Date = craneOtherExpenses.Expense_Date;

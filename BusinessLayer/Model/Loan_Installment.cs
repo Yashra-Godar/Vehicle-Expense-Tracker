@@ -12,6 +12,10 @@ namespace BusinessLayer.Model
 
         public int Vehicle_LoanId { get; set; }
 
+        public virtual Staff_Master? Staff_Master { get; set; }
+
+        public int Staff_MasterId { get; set; }
+
         public DateTime Installment_Date { get; set; }= DateTime.Now;
 
         public decimal Amount_Paid { get; set; }

@@ -46,7 +46,12 @@ namespace DatabaseLayer.Repositories
         {
             try
             {
-                var result=await _dbContext.tbl_Vehicles.ToListAsync();
+                var result=await _dbContext.tbl_Vehicles.Select(o=> new
+                {
+                    o.Id,
+                    o.TypeName,
+                    totalVehicle = o.Crane_Vehicles.Count()
+                }).ToListAsync();
                 return new ResponseResult("OK", result);
             }
             catch (Exception ex)
@@ -60,11 +65,16 @@ namespace DatabaseLayer.Repositories
         {
             try
             {
-                 _dbContext.tbl_Vehicles.Add(vehicle_Type);
-                  await _dbContext.SaveChangesAsync();
-                  return new ResponseResult("OK", "Data Inserted Successfully");
+
+                if (!await _dbContext.tbl_Vehicles.AnyAsync(o=> o.TypeName == vehicle_Type.TypeName))
+                {
+                    _dbContext.tbl_Vehicles.Add(vehicle_Type);
+                    await _dbContext.SaveChangesAsync();
+                    return new ResponseResult("OK", "Data Inserted Successfully");
+                }
+
+                return new ResponseResult("Fail", "Already Exists");
             }
-                
             
             catch (Exception ex)
             {
@@ -76,19 +86,25 @@ namespace DatabaseLayer.Repositories
         {
             try
             {
-                var result = await _dbContext.tbl_Vehicles.FindAsync(Id);
-                if (result != null)
+                if (!await _dbContext.tbl_Vehicles.AnyAsync(o => o.TypeName == vehicle_Type.TypeName && o.Id != vehicle_Type.Id))
                 {
-                    result.TypeName = vehicle_Type.TypeName;
-                    await _dbContext.SaveChangesAsync();
+                    var result = await _dbContext.tbl_Vehicles.FindAsync(Id);
+                    if (result != null)
+                    {
+                        result.TypeName = vehicle_Type.TypeName;
+                        await _dbContext.SaveChangesAsync();
 
-                    return new ResponseResult("OK", "Data Updated Successfully");
+                        return new ResponseResult("OK", "Data Updated Successfully");
+                    }
+                    else
+                    {
+                        return new ResponseResult("Fail", "Data not Found");
+                    }
                 }
                 else
                 {
-                    return new ResponseResult("Fail", "Data not Found");
+                    return new ResponseResult("Fail", "Already Exists");
                 }
-               
             }
             catch (Exception ex)
             {

@@ -45,7 +45,28 @@ namespace DatabaseLayer.Repositories
         {
             try
             {
-                var result = await _dbContext.tbl_CraneVehicle.ToListAsync();
+                var result = await _dbContext.tbl_CraneVehicle.Select(o=> new
+                {
+
+                    o.Id,
+                    o.Vehicle_TypeId,
+                    o.Vehicle_Type!.TypeName,             
+                    o.Staff_MasterId,
+                    o.Staff_Master!.FullName,
+                    o.Vehicle_Name,
+                    o.Make_by,
+                    o.Model,
+                    o.Manufacture_Year,
+                    o.Capacity_Tons,
+                    o.Max_Lifting_Height,
+                    o.Import_From,
+                    o.Note,
+                    o.Import_Date,
+                    o.Purchase_Type,
+                    
+
+                    
+                }).ToListAsync();
                 return new ResponseResult("OK", result);
             }
             catch (Exception ex)
@@ -64,6 +85,10 @@ namespace DatabaseLayer.Repositories
                 if (!await _dbContext.tbl_Vehicles.AnyAsync(o => o.Id == crane_Vehicle.Vehicle_TypeId))
                 {
                     error.Add("VehicleType_Id does not exist");
+                }
+                if (!await _dbContext.tbl_Staff_Master.AnyAsync(o => o.Id == crane_Vehicle.Staff_MasterId))
+                {
+                    error.Add("Staff_MasterId does not exist");
                 }
                 var result = await _dbContext.tbl_CraneVehicle.ToListAsync();
                 if (result.Any(o=>o.Vehicle_No==crane_Vehicle.Vehicle_No)) 
@@ -96,9 +121,14 @@ namespace DatabaseLayer.Repositories
                 if (result != null)
                 {
                     if (!await _dbContext.tbl_Vehicles.AnyAsync(o => o.Id == crane_Vehicle.Vehicle_TypeId)) {
-                        return new ResponseResult("Fail","Vehicle_Type id not exists");
+                        return new ResponseResult("Fail","Vehicle_Type Id not exists");
+                    }
+                    if (!await _dbContext.tbl_Staff_Master.AnyAsync(o => o.Id == crane_Vehicle.Staff_MasterId))
+                    {
+                        return new ResponseResult("Fail", "Staff_MasterId not exists");
                     }
                     result.Vehicle_TypeId = crane_Vehicle.Vehicle_TypeId;
+                    result.Staff_MasterId=crane_Vehicle.Staff_MasterId;
                     result.Vehicle_No = crane_Vehicle.Vehicle_No;
                     result.Vehicle_Name = crane_Vehicle.Vehicle_Name;
                     result.Make_by=crane_Vehicle.Make_by;

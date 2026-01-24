@@ -87,9 +87,8 @@ namespace Vehicle_Expense_Tracker.Controllers
             {
                 var result = await _Master.ListService();
                 if(result.status == "OK")
-                {
-                   
-                        return Ok(result);
+                {        
+                     return Ok(result);
                     }
                     else
                     {

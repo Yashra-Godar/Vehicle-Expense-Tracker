@@ -45,7 +45,15 @@ namespace DatabaseLayer.Repositories
         {
             try
             {
-                var result= await _dbContext.tbl_Staff_Master.ToListAsync();
+                var result= await _dbContext.tbl_Staff_Master.Select(o=> new
+                {
+                    o.Id,
+                    o.FullName,
+                    o.ContactNo,
+                    o.Email,
+                    o.Password,
+                    o.IsActive
+                }).ToListAsync();
                 await _dbContext.SaveChangesAsync();
                 return new ResponseResult("OK", result);
             }

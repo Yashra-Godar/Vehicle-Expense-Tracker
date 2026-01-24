@@ -47,7 +47,20 @@ namespace DatabaseLayer.Repositories
         {
             try
             {
-                var result = await _dbContext.tbl_ServiceParts.ToListAsync();
+                var result = await _dbContext.tbl_ServiceParts.Select(o=> new
+                {
+                    o.Id,
+                    o.Service_MasterId,
+                    o.Service_Master!.Service_Type,
+                    o.Service_Master!.Performed_By,
+                    o.Staff_MasterId,
+                    o.Staff_Master!.FullName,
+                    o.Parts_Name,
+                    o.Qty,
+                    o.Unit_Cost,
+                    o.Total_Cost,
+                    o.Remark
+                }).ToListAsync();
                 return new ResponseResult("OK", result);
             }
             catch (Exception ex)
@@ -64,6 +77,10 @@ namespace DatabaseLayer.Repositories
                 if (!await _dbContext.tbl_ServiceMaster.AnyAsync(o => o.Id == service_Parts.Service_MasterId))
                 {
                     error.Add("Service_MasterId does not exist");
+                }
+                if (!await _dbContext.tbl_Staff_Master.AnyAsync(o => o.Id == service_Parts.Staff_MasterId))
+                {
+                    error.Add("Staff_MasterId does not exist");
                 }
                 if (error.Count == 0)
                 {
@@ -92,6 +109,10 @@ namespace DatabaseLayer.Repositories
                     if (!await _dbContext.tbl_ServiceMaster.AnyAsync(o => o.Id == service_Parts.Service_MasterId))
                     {
                         return new ResponseResult("Fail", "Service_MasterId does not exist");
+                    }
+                    if (!await _dbContext.tbl_Staff_Master.AnyAsync(o => o.Id == service_Parts.Staff_MasterId))
+                    {
+                        return new ResponseResult("Fail", "Staff_MasterId does not exist");
                     }
                     result.Service_MasterId = service_Parts.Service_MasterId;
                     result.Parts_Name = service_Parts.Parts_Name;

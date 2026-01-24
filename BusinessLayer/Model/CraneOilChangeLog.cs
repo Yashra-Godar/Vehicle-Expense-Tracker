@@ -12,6 +12,10 @@ namespace BusinessLayer.Model
 
         public int Vehicle_TypeId { get; set; }
 
+        public virtual Staff_Master? Staff_Master { get; set; }
+
+        public int Staff_MasterId {  get; set; }
+
         public string Oil_Type { get; set; }=string.Empty;
 
         public string Oil_Brand { get; set; } = string.Empty;

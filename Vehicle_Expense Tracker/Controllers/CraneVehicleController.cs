@@ -35,11 +35,11 @@ namespace Vehicle_Expense_Tracker.Controllers
             }
         }
         [HttpPut("Update/{Id}")]
-        public async Task<IActionResult> UpdateCrane_Vehicle(int id, Crane_Vehicle crane_vehicle)
+        public async Task<IActionResult> UpdateCrane_Vehicle(int Id, Crane_Vehicle crane_vehicle)
         {
             try
             {
-                var result=await _craneVehicle.UpdateCrane_Vehicle(id, crane_vehicle);
+                var result=await _craneVehicle.UpdateCrane_Vehicle(Id, crane_vehicle);
                 if (result != null)
                 {
                     return Ok(result);

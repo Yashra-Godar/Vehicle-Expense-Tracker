@@ -17,11 +17,11 @@ namespace Vehicle_Expense_Tracker.Controllers
 
         [HttpPost("Save")]
 
-        public async Task<IActionResult> SaveLoan_Installment(Loan_Installment LoanInstallment)
+        public async Task<IActionResult> SaveLoan_Installment(Loan_Installment loan_installment)
         {
             try
             {
-                var result = await _Installment.SaveLoan_Installment(LoanInstallment);
+                var result = await _Installment.SaveLoan_Installment(loan_installment);
                 if (result != null)
                 {
                     return Ok(result);
