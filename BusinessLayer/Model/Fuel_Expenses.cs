@@ -8,9 +8,9 @@ namespace BusinessLayer.Model
     {
         public int Id { get; set; }
 
-        public virtual Vehicle_Type? Vehicle_Type { get; set; }
+        public virtual Crane_Vehicle? Crane_Vehicle { get; set; }
 
-        public int Vehicle_TypeId { get; set; }
+        public int Crane_VehicleId { get; set; }
 
         public virtual Staff_Master? Staff_Master { get; set; }
 

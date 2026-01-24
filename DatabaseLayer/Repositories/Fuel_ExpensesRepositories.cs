@@ -45,8 +45,8 @@ namespace DatabaseLayer.Repositories
                 var result = await _dbContext.tbl_FuelExpenses.Select(o=> new
                 {
                     o.Id,
-                    o.Vehicle_TypeId,
-                    o.Vehicle_Type!.TypeName,
+                    o.Crane_VehicleId,
+                    o.Crane_Vehicle!.Vehicle_Name,
                     o.Staff_MasterId,
                     o.Staff_Master!.FullName,
                     o.Fuel_Date,
@@ -72,9 +72,9 @@ namespace DatabaseLayer.Repositories
             try
             {
                 List<string> error = new List<string>();
-                if (!await _dbContext.tbl_Vehicles.AnyAsync(o => o.Id == fuel_Expenses.Vehicle_TypeId))
+                if (!await _dbContext.tbl_CraneVehicle.AnyAsync(o => o.Id == fuel_Expenses.Crane_VehicleId))
                 {
-                    error.Add("VehicleType_Id does not exist");
+                    error.Add("Crane_VehicleId does not exist");
                 }
                 if (!await _dbContext.tbl_Staff_Master.AnyAsync(o => o.Id == fuel_Expenses.Staff_MasterId))
                 {
@@ -111,18 +111,19 @@ namespace DatabaseLayer.Repositories
                 var result = await _dbContext.tbl_FuelExpenses.FindAsync(Id);
                 if (result != null)
                 {
-                    if (!await _dbContext.tbl_Vehicles.AnyAsync(o => o.Id == fuel_Expenses.Vehicle_TypeId))
+                    if (!await _dbContext.tbl_CraneVehicle.AnyAsync(o => o.Id == fuel_Expenses.Crane_VehicleId))
                     {
-                        return new ResponseResult("Fail", "Vehicle_TypeId not exists");
+                        return new ResponseResult("Fail", " Crane_VehicleId not exists");
                     }
                     if (!await _dbContext.tbl_Staff_Master.AnyAsync(o => o.Id == fuel_Expenses.Staff_MasterId))
                     {
                         return new ResponseResult("Fail", "Staff_MasterId not exists");
                     }
-                    result.Vehicle_TypeId = fuel_Expenses.Vehicle_TypeId;
+                    result.Crane_VehicleId = fuel_Expenses.Crane_VehicleId;
                     result.Staff_MasterId = fuel_Expenses.Staff_MasterId;
                     result.Fuel_Date = fuel_Expenses.Fuel_Date;
                     result.Fuel_Source = fuel_Expenses.Fuel_Source;
+                    result.Fuel_Station = fuel_Expenses.Fuel_Station;
                     result.Fuel_Qty = fuel_Expenses.Fuel_Qty;
                     result.Rate = fuel_Expenses.Rate;
                     result.Odometer_Reading = fuel_Expenses.Odometer_Reading;

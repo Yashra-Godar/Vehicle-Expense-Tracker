@@ -52,6 +52,7 @@ namespace DatabaseLayer.Repositories
                     o.Id,
                     o.Service_MasterId,
                     o.Service_Master!.Service_Type,
+                    
                     o.Service_Master!.Performed_By,
                     o.Staff_MasterId,
                     o.Staff_Master!.FullName,

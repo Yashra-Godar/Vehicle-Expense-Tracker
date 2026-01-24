@@ -44,8 +44,8 @@ namespace DatabaseLayer.Repositories
                 var result=await _dbContext.tbl_VehicleLoan.Select(o=> new
                 {
                     o.Id,
-                    o.Vehicle_TypeId,
-                    o.Vehicle_Type!.TypeName,
+                    o.Crane_VehicleId,
+                    o.Crane_Vehicle!.Vehicle_Name,
                     o.Staff_MasterId,
                     o.Staff_Master!.FullName,
                     o.Loan_Provider,
@@ -70,9 +70,9 @@ namespace DatabaseLayer.Repositories
             try
             {
                 List<string> error = new List<string>();
-                if (!await _dbContext.tbl_Vehicles.AnyAsync(o => o.Id == vehicle_loan.Vehicle_TypeId))
+                if (!await _dbContext.tbl_CraneVehicle.AnyAsync(o => o.Id == vehicle_loan.Crane_VehicleId))
                 {
-                    error.Add("VehicleType_Id does not exist");
+                    error.Add(" Crane_VehicleId does not exist");
                 }
                 if (!await _dbContext.tbl_Staff_Master.AnyAsync(o => o.Id == vehicle_loan.Staff_MasterId))
                 {
@@ -103,15 +103,15 @@ namespace DatabaseLayer.Repositories
                 var result = await _dbContext.tbl_VehicleLoan.FindAsync(Id);
                 if (result != null)
                 {
-                    if (!await _dbContext.tbl_Vehicles.AnyAsync(o => o.Id == vehicle_loan.Vehicle_TypeId))
+                    if (!await _dbContext.tbl_CraneVehicle.AnyAsync(o => o.Id == vehicle_loan.Crane_VehicleId))
                     {
-                        return new ResponseResult("Fail", "Vehicle_TypeId  does not exists");
+                        return new ResponseResult("Fail", "Crane_VehicleId  does not exists");
                     }
                     if (!await _dbContext.tbl_Staff_Master.AnyAsync(o => o.Id == vehicle_loan.Staff_MasterId))
                     {
                         return new ResponseResult("Fail", " Staff_MasterId does not exists");
                     }
-                    result.Vehicle_TypeId = vehicle_loan.Vehicle_TypeId;
+                    result.Crane_VehicleId = vehicle_loan.Crane_VehicleId;
                     result.Staff_MasterId = vehicle_loan.Staff_MasterId;
                     result.Loan_Provider = vehicle_loan.Loan_Provider;
                     result.Loan_Amount = vehicle_loan.Loan_Amount;

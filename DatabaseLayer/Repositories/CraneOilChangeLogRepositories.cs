@@ -49,8 +49,8 @@ namespace DatabaseLayer.Repositories
                 var result = await _dbContext.craneOilChangeLogs.Select(o=> new
                 {
                     o.Id,
-                    o.Vehicle_TypeId,
-                    o.Vehicle_Type!.TypeName,
+                    o.Crane_VehicleId,
+                    o.Crane_Vehicle!.Vehicle_Name,
                     o.Staff_MasterId,
                     o.Staff_Master!.FullName,
                     o.Oil_Type,
@@ -76,9 +76,9 @@ namespace DatabaseLayer.Repositories
             try
             {
                 List<string> error = new List<string>();
-                if (!await _dbContext.tbl_Vehicles.AnyAsync(o => o.Id == craneOilChangeLog.Vehicle_TypeId))
+                if (!await _dbContext.tbl_CraneVehicle.AnyAsync(o => o.Id == craneOilChangeLog.Crane_VehicleId))
                 {
-                    error.Add("Vehicle_TypeId does not exist");
+                    error.Add("crane_vehicleId does not exist");
                 }
                 if (!await _dbContext.tbl_Staff_Master.AnyAsync(o => o.Id == craneOilChangeLog.Staff_MasterId))
                 {
@@ -110,15 +110,15 @@ namespace DatabaseLayer.Repositories
             
             if (result != null)
             {
-                if (!await _dbContext.tbl_Vehicles.AnyAsync(o => o.Id == craneOilChangeLog.Vehicle_TypeId))
+                if (!await _dbContext.tbl_CraneVehicle.AnyAsync(o => o.Id == craneOilChangeLog.Crane_VehicleId))
                 {
-                    return new ResponseResult("Fail", "Vehicle_TypeId does not exist");
+                    return new ResponseResult("Fail", "Crane_vehicleId does not exist");
                 }
                  if (!await _dbContext.tbl_Staff_Master.AnyAsync(o => o.Id == craneOilChangeLog.Staff_MasterId))
                     {
                         return new ResponseResult("Fail", "Staff_MasterId does not exist");
                     }
-                    result.Vehicle_TypeId = craneOilChangeLog.Vehicle_TypeId;
+                    result.Crane_VehicleId = craneOilChangeLog.Crane_VehicleId;
                     result.Staff_MasterId = craneOilChangeLog.Staff_MasterId;
                     result.Oil_Type=craneOilChangeLog.Oil_Type;
                     result.Oil_Brand = craneOilChangeLog.Oil_Brand;

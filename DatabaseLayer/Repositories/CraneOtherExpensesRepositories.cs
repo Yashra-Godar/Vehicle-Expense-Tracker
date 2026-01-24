@@ -46,8 +46,8 @@ namespace DatabaseLayer.Repositories
                 var result = await _dbContext.craneOtherExpenses.Select(o => new
                 {
                     o.Id,
-                    o.Vehicle_TypeId,
-                    o.Vehicle_Type!.TypeName,
+                    o.Crane_VehicleId,
+                    o.Crane_Vehicle!.Vehicle_Name,
                     o.Staff_MasterId,
                     o.Staff_Master!.FullName,
                     o.Expense_Type,
@@ -72,9 +72,9 @@ namespace DatabaseLayer.Repositories
                 try
                 {
                     List<string> error = new List<string>();
-                    if (!await _dbContext.tbl_Vehicles.AnyAsync(o => o.Id == craneOtherExpenses.Vehicle_TypeId))
+                    if (!await _dbContext.tbl_CraneVehicle.AnyAsync(o => o.Id == craneOtherExpenses.Crane_VehicleId))
                     {
-                        error.Add("Vehicle_TypeId does not exist");
+                        error.Add("Crane_VehicleId does not exist");
                     }
                     if (!await _dbContext.tbl_Staff_Master.AnyAsync(o => o.Id == craneOtherExpenses.Staff_MasterId))
                    {
@@ -112,15 +112,15 @@ namespace DatabaseLayer.Repositories
 
                 if (result != null)
                 {
-                    if (!await _dbContext.tbl_Vehicles.AnyAsync(o => o.Id == craneOtherExpenses.Vehicle_TypeId))
+                    if (!await _dbContext.tbl_CraneVehicle.AnyAsync(o => o.Id == craneOtherExpenses.Crane_VehicleId))
                     {
-                        return new ResponseResult("Fail", "Vehicle_TypeId does not exist");
+                        return new ResponseResult("Fail", "Crane_VehicleId does not exist");
                     }
                     if (!await _dbContext.tbl_Staff_Master.AnyAsync(o => o.Id == craneOtherExpenses.Staff_MasterId))
                     {
                         return new ResponseResult("Fail", "Staff_MasterId does not exist");
                     }
-                    result.Vehicle_TypeId = craneOtherExpenses.Vehicle_TypeId;
+                    result.Crane_VehicleId = craneOtherExpenses.Crane_VehicleId;
                     result.Staff_MasterId = craneOtherExpenses.Staff_MasterId;
                     result.Expense_Type=craneOtherExpenses.Expense_Type;
                     result.Amount = craneOtherExpenses.Amount;
