@@ -34,7 +34,7 @@ namespace Vehicle_Expense_Tracker.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, new ResponseResult("Internal Server Error", ex.Message));
-               
+
             }
         }
 
@@ -44,7 +44,7 @@ namespace Vehicle_Expense_Tracker.Controllers
         {
             try
             {
-                var result=await _changeLog.UpdateCraneOilChange(Id, craneOilChangeLog);
+                var result = await _changeLog.UpdateCraneOilChange(Id, craneOilChangeLog);
                 if (result.status == "OK")
                 {
                     return Ok(result);
@@ -61,7 +61,7 @@ namespace Vehicle_Expense_Tracker.Controllers
         }
 
         [HttpDelete("Delete/{Id}")]
-        public async Task<IActionResult>DeleteCraneOilChange(int Id)
+        public async Task<IActionResult> DeleteCraneOilChange(int Id)
         {
             try
             {
@@ -101,7 +101,31 @@ namespace Vehicle_Expense_Tracker.Controllers
                 return StatusCode(500, new ResponseResult("Internal Server Error", ex.Message));
             }
 
+
         }
-    
+
+        [HttpGet("Detail/{Id}")]
+        public async Task<IActionResult> DetailCraneOilChange(int Id)
+            {
+                try
+                {
+                    var result = await _changeLog.DetailCraneOilChange(Id);
+                    if (result.status == "OK")
+                    {
+                        return Ok(result);
+                    }
+                    else
+                    {
+                        return BadRequest(result);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return StatusCode(500, new ResponseResult("Internal Server Error", ex.Message));
+                }
+
+            }
+
+        }
     }
-}
+

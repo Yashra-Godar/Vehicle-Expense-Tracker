@@ -41,6 +41,56 @@ namespace DatabaseLayer.Repositories
             }
         }
 
+        public async Task<ResponseResult> DetailCrane_Vehicle(int Id)
+        {
+            try
+            {
+                var result = await _dbContext.tbl_CraneVehicle.Where(o => o.Id == Id).Select(o => new
+                {
+                    o.Id,
+                    staff = new
+                    {
+                        o.Staff_MasterId,
+                        o.Staff_Master!.FullName,
+                    },
+                    
+                    o.Vehicle_Name,
+                    o.Vehicle_No,
+                    o.Vehicle_Type!.TypeName,
+                    o.Make_by,
+                    o.Manufacture_Year,
+                    o.Capacity_Tons,
+                    o.Max_Lifting_Height,
+                    o.Created_At,
+                    o.Import_Date,
+                    o.Import_From,
+                    o.Purchase_Type,
+                    o.Remarks,
+                    
+                }).FirstOrDefaultAsync();
+
+                if (result != null)
+                {
+
+                    return new ResponseResult("OK", result);
+
+                }
+                else
+                {
+                    return new ResponseResult("Fail", "Not Found");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return new ResponseResult("Fail", ex.Message);
+            }
+        }
+
+            
+
+
+                    
         public async Task<ResponseResult> ListCrane_Vehicle()
         {
             try
@@ -49,11 +99,19 @@ namespace DatabaseLayer.Repositories
                 {
 
                     o.Id,
-                    o.Vehicle_TypeId,
-                    o.Vehicle_Type!.TypeName,             
-                    o.Staff_MasterId,
-                    o.Staff_Master!.FullName,
+                    vehicleType = new
+                    {
+                        o.Vehicle_TypeId,
+                        o.Vehicle_Type!.TypeName,
+                    },
+                    Staff = new
+                    {
+                        o.Staff_MasterId,
+                        o.Staff_Master!.FullName,
+                    },
+                                        
                     o.Vehicle_Name,
+                    o.Vehicle_No,
                     o.Make_by,
                     o.Model,
                     o.Manufacture_Year,
@@ -63,7 +121,7 @@ namespace DatabaseLayer.Repositories
                     o.Note,
                     o.Import_Date,
                     o.Purchase_Type,
-                    
+                    o.Created_At
 
                     
                 }).ToListAsync();
@@ -117,6 +175,7 @@ namespace DatabaseLayer.Repositories
         {
             try
             {
+
                 var result =  await _dbContext.tbl_CraneVehicle.FindAsync(Id);
                 if (result != null)
                 {
@@ -127,6 +186,7 @@ namespace DatabaseLayer.Repositories
                     {
                         return new ResponseResult("Fail", "Staff_MasterId not exists");
                     }
+                    
                     result.Vehicle_TypeId = crane_Vehicle.Vehicle_TypeId;
                     result.Staff_MasterId=crane_Vehicle.Staff_MasterId;
                     result.Vehicle_No = crane_Vehicle.Vehicle_No;

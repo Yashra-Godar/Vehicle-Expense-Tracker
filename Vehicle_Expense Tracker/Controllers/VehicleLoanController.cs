@@ -19,7 +19,7 @@ namespace Vehicle_Expense_Tracker.Controllers
         {
             try
             {
-                var result= await _Loan.SaveVehicle_Loan(vehicle_loan);
+                var result = await _Loan.SaveVehicle_Loan(vehicle_loan);
                 if (result != null)
                 {
                     return Ok(result);
@@ -42,7 +42,7 @@ namespace Vehicle_Expense_Tracker.Controllers
         {
             try
             {
-                var result=await _Loan.UpdateVehicle_Loan(Id, vehicle_loan);
+                var result = await _Loan.UpdateVehicle_Loan(Id, vehicle_loan);
                 if (result.status == "OK")
                 {
                     return Ok(result);
@@ -58,12 +58,12 @@ namespace Vehicle_Expense_Tracker.Controllers
         }
 
         [HttpDelete("Delete/{Id}")]
-        public async Task<IActionResult>DeleteVehicle_Loan(int Id)
+        public async Task<IActionResult> DeleteVehicle_Loan(int Id)
         {
             try
             {
-                var result= await _Loan.DeleteVehicle_Loan(Id);
-                if(result.status == "OK")
+                var result = await _Loan.DeleteVehicle_Loan(Id);
+                if (result.status == "OK")
                 {
                     return Ok(result);
                 }
@@ -83,8 +83,8 @@ namespace Vehicle_Expense_Tracker.Controllers
         {
             try
             {
-                var result=await _Loan.ListVehicle_Loan();
-                if(result.status == "OK")
+                var result = await _Loan.ListVehicle_Loan();
+                if (result.status == "OK")
                 {
                     return Ok(result);
                 }
@@ -92,7 +92,7 @@ namespace Vehicle_Expense_Tracker.Controllers
                 {
                     return BadRequest(result);
                 }
-            
+
             }
             catch (Exception ex)
             {
@@ -102,6 +102,29 @@ namespace Vehicle_Expense_Tracker.Controllers
 
         }
 
+        [HttpGet("Detail/{Id}")]
+        public async Task<IActionResult> DetailVehicle_Loan(int Id)
+        {
+            try
+            {
+                var result = await _Loan.DetailVehicle_Loan(Id);
+                if (result.status == "OK")
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest(result);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ResponseResult("Internal Server Error", ex.Message));
+            }
+
+
+        }
     }
-    }
+}
 

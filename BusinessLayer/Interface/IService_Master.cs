@@ -15,6 +15,8 @@ namespace BusinessLayer.Interface
 
         public Task<ResponseResult>DeleteService(int Id);
 
+        public Task<ResponseResult> DetailService(int Id);
+
 
     }
 }

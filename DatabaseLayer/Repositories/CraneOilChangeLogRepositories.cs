@@ -1,4 +1,5 @@
-﻿using BusinessLayer.Interface;
+﻿using Azure;
+using BusinessLayer.Interface;
 using BusinessLayer.Model;
 using DatabaseLayer.ApplicationContext;
 using Microsoft.EntityFrameworkCore;
@@ -42,17 +43,30 @@ namespace DatabaseLayer.Repositories
 
         }
 
-        public async Task<ResponseResult> ListOilChange()
+        public async Task<ResponseResult> DetailCraneOilChange(int Id)
         {
             try
             {
-                var result = await _dbContext.craneOilChangeLogs.Select(o=> new
+                var result = await _dbContext.craneOilChangeLogs.Where(o => o.Id == Id).Select(o => new
+
                 {
                     o.Id,
-                    o.Crane_VehicleId,
-                    o.Crane_Vehicle!.Vehicle_Name,
-                    o.Staff_MasterId,
-                    o.Staff_Master!.FullName,
+
+                    vehicle = new
+                    {
+                        o.Crane_VehicleId,
+                        o.Crane_Vehicle!.Vehicle_Name,
+                        o.Crane_Vehicle!.Vehicle_No,
+                        o.Crane_Vehicle!.Max_Lifting_Height,
+                        o.Crane_Vehicle!.Capacity_Tons,
+                        o.Crane_Vehicle!.Make_by,
+                        o.Crane_Vehicle!.Manufacture_Year
+                    },
+                    staff = new
+                    {
+                        o.Staff_MasterId,
+                        o.Staff_Master!.FullName,
+                    },
                     o.Oil_Type,
                     o.Oil_Brand,
                     o.Oil_Qty,
@@ -61,7 +75,61 @@ namespace DatabaseLayer.Repositories
                     o.Change_Date,
                     o.NextDue_Date,
                     o.Changed_By,
-                    o.Remarks
+                    o.Remarks,
+                    o.Created_At
+                }).FirstOrDefaultAsync();
+                if (result != null)
+                {
+
+                    return new ResponseResult("OK", result);
+
+                }
+                else
+                {
+                    return new ResponseResult("Fail", "Not Found");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return new ResponseResult("Fail", ex.Message);
+            }
+
+        }
+
+        public async Task<ResponseResult> ListOilChange()
+        {
+            try
+            {
+                var result = await _dbContext.craneOilChangeLogs.Select(o=> new
+                {
+                    o.Id,
+
+                    vehicle = new
+                    {
+                        o.Crane_VehicleId,
+                        o.Crane_Vehicle!.Vehicle_Name,
+                        o.Crane_Vehicle!.Vehicle_No,
+                        o.Crane_Vehicle!.Max_Lifting_Height,
+                        o.Crane_Vehicle!.Capacity_Tons,
+                        o.Crane_Vehicle!.Make_by,
+                        o.Crane_Vehicle!.Manufacture_Year
+                    },
+                    staff = new
+                    {
+                        o.Staff_MasterId,
+                        o.Staff_Master!.FullName,
+                    },
+                    o.Oil_Type,
+                    o.Oil_Brand,
+                    o.Oil_Qty,
+                    o.Unit,
+                    o.Meter_Reading,
+                    o.Change_Date,
+                    o.NextDue_Date,
+                    o.Changed_By,
+                    o.Remarks,
+                    o.Created_At,
                 }).ToListAsync();
                 return new ResponseResult("OK", result);
             }

@@ -14,7 +14,11 @@ namespace BusinessLayer.Interface
         public Task<ResponseResult> DeleteCrane_Vehicle(int Id);
 
         public Task<ResponseResult> ListCrane_Vehicle();
-        
+
+        public Task<ResponseResult> DetailCrane_Vehicle(int Id);
+
+
+
 
 
 

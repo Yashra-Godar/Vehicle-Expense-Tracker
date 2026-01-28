@@ -15,6 +15,10 @@ namespace BusinessLayer.Interface
 
         public Task<ResponseResult> DeleteCrane_Insurance(int Id);
 
+        public Task<ResponseResult> DetailCrane_Insurance(int Id);
+
+
+
 
 
     }

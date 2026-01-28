@@ -12,14 +12,14 @@ namespace Vehicle_Expense_Tracker.Controllers
         private readonly IInsurance_Premium _Premium;
         public InsurancePremiumController(IInsurance_Premium Premium)
         {
-            _Premium= Premium;
+            _Premium = Premium;
         }
         [HttpPost("Save")]
-        public async Task<IActionResult>SaveInsurance_Premium(Insurance_Premium insurance_Premium)
+        public async Task<IActionResult> SaveInsurance_Premium(Insurance_Premium insurance_Premium)
         {
             try
             {
-                var result= await _Premium.SaveInsurance_Premium(insurance_Premium);
+                var result = await _Premium.SaveInsurance_Premium(insurance_Premium);
                 if (result != null)
                 {
                     return Ok(result);
@@ -38,11 +38,11 @@ namespace Vehicle_Expense_Tracker.Controllers
         }
 
         [HttpPut("Update/{Id}")]
-        public async Task<IActionResult>UpdateInsurance_Premium(int Id,Insurance_Premium insurance_Premium)
+        public async Task<IActionResult> UpdateInsurance_Premium(int Id, Insurance_Premium insurance_Premium)
         {
             try
             {
-                var result= await _Premium.UpdateInsurance_Premium(Id, insurance_Premium);
+                var result = await _Premium.UpdateInsurance_Premium(Id, insurance_Premium);
                 if (result.status == "OK")
                 {
                     return Ok(result);
@@ -62,11 +62,11 @@ namespace Vehicle_Expense_Tracker.Controllers
 
 
         [HttpDelete("Delete/{Id}")]
-        public async Task<IActionResult>DeleteInsurance_Premium(int Id)
+        public async Task<IActionResult> DeleteInsurance_Premium(int Id)
         {
             try
             {
-                var result=await _Premium.DeleteInsurance_Premium(Id);
+                var result = await _Premium.DeleteInsurance_Premium(Id);
                 if (result.status == "OK")
                 {
                     return Ok(result);
@@ -89,7 +89,7 @@ namespace Vehicle_Expense_Tracker.Controllers
         {
             try
             {
-                var result= await _Premium.ListInsurance_Premium();
+                var result = await _Premium.ListInsurance_Premium();
                 if (result.status == "OK")
                 {
                     return Ok(result);
@@ -107,7 +107,31 @@ namespace Vehicle_Expense_Tracker.Controllers
             }
         }
 
+        [HttpGet("Detail/{Id}")]
+        public async Task<IActionResult> DetailInsurance_Premium(int Id)
+        {
+            try
+            {
+                var result = await _Premium.DetailInsurance_Premium(Id);
+                if (result.status == "OK")
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest(result);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ResponseResult("Internal Server Error", ex.Message));
+
+            }
 
 
+
+
+        }
     }
 }

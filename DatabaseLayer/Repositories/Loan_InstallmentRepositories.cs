@@ -57,7 +57,8 @@ namespace DatabaseLayer.Repositories
                     o.Receipt_No,
                     o.Paid_On,
                     o.Status,
-                    o.Note
+                    o.Note,
+                    o.Created_At
                 }).ToListAsync();
                 return new ResponseResult("OK", result);
             }

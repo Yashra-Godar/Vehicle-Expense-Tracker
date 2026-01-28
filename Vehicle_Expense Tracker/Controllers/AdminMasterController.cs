@@ -88,11 +88,34 @@ namespace Vehicle_Expense_Tracker.Controllers
 
 
         [HttpGet("List")]
-        public async Task<IActionResult>ListAdmin_Master()
+        public async Task<IActionResult> ListAdmin_Master()
         {
             try
             {
-                var result= await _Master.ListAdmin_Master();
+                var result = await _Master.ListAdmin_Master();
+                if (result.status == "OK")
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest(result);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ResponseResult("Internal Server Error", ex.Message));
+            }
+        }
+
+
+        [HttpGet("Detail/{Id}")]
+        public async Task<IActionResult> DetailAdmin_Master(int Id)
+        {
+            try
+            {
+                var result = await _Master.DetailAdmin_Master(Id);
                 if (result.status == "OK")
                 {
                     return Ok(result);

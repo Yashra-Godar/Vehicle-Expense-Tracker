@@ -41,12 +41,12 @@ namespace Vehicle_Expense_Tracker.Controllers
         }
 
         [HttpPut("Update/{Id}")]
-        public async Task<IActionResult> UpdateCrane_Insurance(int Id,Crane_Insurance Crane_Insurance)
+        public async Task<IActionResult> UpdateCrane_Insurance(int Id, Crane_Insurance Crane_Insurance)
         {
             try
             {
-                var result= await _Insurance.UpdateCrane_Insurance(Id, Crane_Insurance);
-                if(result.status=="OK")
+                var result = await _Insurance.UpdateCrane_Insurance(Id, Crane_Insurance);
+                if (result.status == "OK")
                 {
                     return Ok(result);
                 }
@@ -111,5 +111,30 @@ namespace Vehicle_Expense_Tracker.Controllers
             }
 
         }
+
+        [HttpGet("Detail/{Id}")]
+        public async Task<IActionResult> DetailCrane_Insurance(int Id)
+        {
+            try
+            {
+                var result = await _Insurance.DetailCrane_Insurance(Id);
+                if (result.status == "OK")
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest(result);
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ResponseResult("Internal Server Error", ex.Message));
+
+            }
+        }
     }
+
 }

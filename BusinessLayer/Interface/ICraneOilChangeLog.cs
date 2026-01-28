@@ -15,5 +15,9 @@ namespace BusinessLayer.Interface
 
         public Task<ResponseResult> ListOilChange();
 
+        public Task<ResponseResult> DetailCraneOilChange(int Id);
+
+
+
     }
 }

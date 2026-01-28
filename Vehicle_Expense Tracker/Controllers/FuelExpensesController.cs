@@ -34,7 +34,7 @@ namespace Vehicle_Expense_Tracker.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, new ResponseResult("Internal Server Error", ex.Message));
-                
+
             }
         }
 
@@ -58,7 +58,7 @@ namespace Vehicle_Expense_Tracker.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, new ResponseResult("Internal Server Error", ex.Message));
-                
+
             }
         }
 
@@ -87,11 +87,33 @@ namespace Vehicle_Expense_Tracker.Controllers
 
         [HttpGet("List")]
 
-        public async Task<IActionResult>ListFuel_Expenses()
+        public async Task<IActionResult> ListFuel_Expenses()
         {
             try
             {
-                var result= await _Expenses.ListFuel_Expenses();
+                var result = await _Expenses.ListFuel_Expenses();
+                if (result.status == "OK")
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ResponseResult("Internal Server Error", ex.Message));
+            }
+        }
+
+        [HttpGet("Detail/{Id}")]
+
+        public async Task<IActionResult> DetailFuel_Expenses(int Id)
+        {
+            try
+            {
+                var result = await _Expenses.DetailFuel_Expenses(Id);
                 if (result.status == "OK")
                 {
                     return Ok(result);

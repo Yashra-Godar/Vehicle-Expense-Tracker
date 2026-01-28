@@ -15,6 +15,10 @@ namespace BusinessLayer.Interface
 
         public Task<ResponseResult> ListInsurance_Premium();
 
+        public Task<ResponseResult> DetailInsurance_Premium(int Id);
+
+
+
 
 
     }

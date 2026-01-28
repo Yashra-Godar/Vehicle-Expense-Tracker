@@ -42,6 +42,66 @@ namespace DatabaseLayer.Repositories
 
         }
 
+        public async Task<ResponseResult> DetailService(int Id)
+        {
+            try
+            {
+                var result = await _dbContext.tbl_ServiceMaster.Where(o => o.Id == Id).Select(o => new
+                {
+                    o.Id,
+
+                    vehicle = new
+                    {
+                        o.Crane_VehicleId,
+                        o.Crane_Vehicle!.Vehicle_Name,
+                        o.Crane_Vehicle!.Vehicle_No,
+                        o.Crane_Vehicle!.Max_Lifting_Height,
+                        o.Crane_Vehicle!.Capacity_Tons,
+                        o.Crane_Vehicle!.Make_by,
+                        o.Crane_Vehicle!.Manufacture_Year
+                    },
+                    staff = new
+                    {
+                        o.Staff_MasterId,
+                        o.Staff_Master!.FullName,
+                    },
+
+                    o.Service_Date,
+                    o.Service_Type,
+                    o.Performed_By,
+                    o.Remark,
+                    o.Cost,
+                    o.Created_At,
+                    serviceParts = o.service_Parts.Select(o=> new
+                    {
+                        o.Id,
+                        o.Parts_Name,
+                        o.Qty,
+                        o.Unit_Cost,
+                        o.Total_Cost,
+                        o.Created_At
+                    }),
+
+                }).FirstOrDefaultAsync();
+                if (result != null)
+                {
+                    
+                    return new ResponseResult("OK", result);
+
+                }
+                else
+                {
+                    return new ResponseResult("Fail", "Not Found");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return new ResponseResult("Fail", ex.Message);
+            }
+
+        }
+
         public async Task<ResponseResult> ListService()
         {
             try
@@ -49,15 +109,29 @@ namespace DatabaseLayer.Repositories
                 var result = await _dbContext.tbl_ServiceMaster.Select(o=> new
                 {
                     o.Id,
-                    o.Crane_VehicleId,
-                    o.Crane_Vehicle!.Vehicle_Name,
-                    o.Staff_MasterId,
-                    o.Staff_Master!.FullName,
+                    
+                    vehicle = new
+                    {
+                        o.Crane_VehicleId,
+                        o.Crane_Vehicle!.Vehicle_Name,
+                        o.Crane_Vehicle!.Vehicle_No,
+                        o.Crane_Vehicle!.Max_Lifting_Height,
+                        o.Crane_Vehicle!.Capacity_Tons,
+                        o.Crane_Vehicle!.Make_by,
+                        o.Crane_Vehicle!.Manufacture_Year
+                    },
+                    staff = new
+                    {
+                        o.Staff_MasterId,
+                        o.Staff_Master!.FullName,
+                    },
+                    
                     o.Service_Date,
                     o.Service_Type,
                     o.Performed_By,
                     o.Remark,
-                    o.Cost
+                    o.Cost,
+                    o.Created_At,
                 }).ToListAsync();
                 return new ResponseResult("OK", result);
             }

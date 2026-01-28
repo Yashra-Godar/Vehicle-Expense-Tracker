@@ -20,7 +20,7 @@ namespace Vehicle_Expense_Tracker.Controllers
         {
             try
             {
-                var result=await _otherExpenses.SaveCraneOtherExpenses(craneOtherExpenses);
+                var result = await _otherExpenses.SaveCraneOtherExpenses(craneOtherExpenses);
                 if (result != null)
                 {
                     return Ok(result);
@@ -38,11 +38,11 @@ namespace Vehicle_Expense_Tracker.Controllers
 
         [HttpPut("Update/{Id}")]
 
-        public async Task<IActionResult> UpdateCraneOtherExpenses(int Id,CraneOtherExpenses craneOtherExpenses)
+        public async Task<IActionResult> UpdateCraneOtherExpenses(int Id, CraneOtherExpenses craneOtherExpenses)
         {
             try
             {
-                var result= await _otherExpenses.UpdateCraneOtherExpenses(Id, craneOtherExpenses);
+                var result = await _otherExpenses.UpdateCraneOtherExpenses(Id, craneOtherExpenses);
                 if (result.status == "OK")
                 {
                     return Ok(result);
@@ -65,7 +65,7 @@ namespace Vehicle_Expense_Tracker.Controllers
         {
             try
             {
-                var result= await _otherExpenses.DeleteCraneOtherExpenses(Id);
+                var result = await _otherExpenses.DeleteCraneOtherExpenses(Id);
                 if (result != null)
                 {
                     return Ok(result);
@@ -74,7 +74,7 @@ namespace Vehicle_Expense_Tracker.Controllers
                 {
                     return BadRequest(result);
                 }
-            
+
             }
             catch (Exception ex)
             {
@@ -88,7 +88,7 @@ namespace Vehicle_Expense_Tracker.Controllers
         {
             try
             {
-                var result= await _otherExpenses.ListCraneOtherExpenses();
+                var result = await _otherExpenses.ListCraneOtherExpenses();
                 if (result.status == "OK")
                 {
                     return Ok(result);
@@ -98,14 +98,36 @@ namespace Vehicle_Expense_Tracker.Controllers
                     return BadRequest(result);
                 }
             }
-            
+
             catch (Exception ex)
             {
                 return StatusCode(500, new ResponseResult("Internal Server Error", ex.Message));
             }
         }
 
+        [HttpGet("Detail/{Id}")]
+
+        public async Task<IActionResult> DetailCraneOtherExpenses(int Id)
+        {
+            try
+            {
+                var result = await _otherExpenses.DetailCraneOtherExpenses(Id);
+                if (result.status == "OK")
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest(result);
+                }
+            }
+
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ResponseResult("Internal Server Error", ex.Message));
+            }
+
 
         }
     }
- 
+}

@@ -41,6 +41,38 @@ namespace DatabaseLayer.Repositories
 
         }
 
+        public async Task<ResponseResult> DetailStaff_Master(int Id)
+        {
+            try
+            {
+                var result = await _dbContext.tbl_Staff_Master.Where(o => o.Id == Id).Select(o => new
+                {
+                    o.Id,
+                    o.FullName,
+                    o.ContactNo,
+                    o.Email,
+                    o.Password,
+                    o.IsActive
+                }).FirstOrDefaultAsync();
+                if (result != null)
+                {
+
+                    return new ResponseResult("OK", result);
+
+                }
+                else
+                {
+                    return new ResponseResult("Fail", "Not Found");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return new ResponseResult("Fail", ex.Message);
+            }
+        }
+
+
         public async Task<ResponseResult> ListStaff_Master()
         {
             try

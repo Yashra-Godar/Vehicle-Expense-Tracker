@@ -38,17 +38,28 @@ namespace DatabaseLayer.Repositories
             }
         }
 
-        public async Task<ResponseResult> ListFuel_Expenses()
+        public async  Task<ResponseResult> DetailFuel_Expenses(int Id)
         {
             try
             {
-                var result = await _dbContext.tbl_FuelExpenses.Select(o=> new
+                var result = await _dbContext.tbl_FuelExpenses.Where(o => o.Id == Id).Select(o => new
                 {
                     o.Id,
-                    o.Crane_VehicleId,
-                    o.Crane_Vehicle!.Vehicle_Name,
-                    o.Staff_MasterId,
-                    o.Staff_Master!.FullName,
+                    vehicle = new
+                    {
+                        o.Crane_VehicleId,
+                        o.Crane_Vehicle!.Vehicle_Name,
+                        o.Crane_Vehicle!.Vehicle_No,
+                        o.Crane_Vehicle!.Max_Lifting_Height,
+                        o.Crane_Vehicle!.Capacity_Tons,
+                        o.Crane_Vehicle!.Make_by,
+                        o.Crane_Vehicle!.Manufacture_Year
+                    },
+                    staff = new
+                    {
+                        o.Staff_MasterId,
+                        o.Staff_Master!.FullName,
+                    },
                     o.Fuel_Date,
                     o.Fuel_Source,
                     o.Fuel_Station,
@@ -57,7 +68,59 @@ namespace DatabaseLayer.Repositories
                     o.Odometer_Reading,
                     o.Payment_Method,
                     o.Receipt_No,
-                    o.Remarks
+                    o.Remarks,
+                    o.Created_At
+                }).FirstOrDefaultAsync();
+                if (result != null)
+                {
+
+                    return new ResponseResult("OK", result);
+
+                }
+                else
+                {
+                    return new ResponseResult("Fail", "Not Found");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return new ResponseResult("Fail", ex.Message);
+            }
+        }
+
+        public async Task<ResponseResult> ListFuel_Expenses()
+        {
+            try
+            {
+                var result = await _dbContext.tbl_FuelExpenses.Select(o=> new
+                {
+                    o.Id,
+                    vehicle = new
+                    {
+                        o.Crane_VehicleId,
+                        o.Crane_Vehicle!.Vehicle_Name,
+                        o.Crane_Vehicle!.Vehicle_No,
+                        o.Crane_Vehicle!.Max_Lifting_Height,
+                        o.Crane_Vehicle!.Capacity_Tons,
+                        o.Crane_Vehicle!.Make_by,
+                        o.Crane_Vehicle!.Manufacture_Year
+                    },
+                    staff = new
+                    {
+                        o.Staff_MasterId,
+                        o.Staff_Master!.FullName,
+                    },
+                    o.Fuel_Date,
+                    o.Fuel_Source,
+                    o.Fuel_Station,
+                    o.Fuel_Qty,
+                    o.Rate,
+                    o.Odometer_Reading,
+                    o.Payment_Method,
+                    o.Receipt_No,
+                    o.Remarks,
+                    o.Created_At
                 }).ToListAsync();
                 return new ResponseResult("OK", result);
             }

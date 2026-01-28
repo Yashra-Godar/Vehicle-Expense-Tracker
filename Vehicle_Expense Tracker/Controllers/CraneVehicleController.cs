@@ -15,11 +15,11 @@ namespace Vehicle_Expense_Tracker.Controllers
             _craneVehicle = craneVehicle;
         }
         [HttpPost("Save")]
-        public async Task<IActionResult>SaveCrane_Vehicle(Crane_Vehicle crane_Vehicle)
+        public async Task<IActionResult> SaveCrane_Vehicle(Crane_Vehicle crane_Vehicle)
         {
             try
             {
-                var result=await _craneVehicle.SaveCrane_Vehicle(crane_Vehicle);
+                var result = await _craneVehicle.SaveCrane_Vehicle(crane_Vehicle);
                 if (result != null)
                 {
                     return Ok(result);
@@ -39,7 +39,7 @@ namespace Vehicle_Expense_Tracker.Controllers
         {
             try
             {
-                var result=await _craneVehicle.UpdateCrane_Vehicle(Id, crane_vehicle);
+                var result = await _craneVehicle.UpdateCrane_Vehicle(Id, crane_vehicle);
                 if (result != null)
                 {
                     return Ok(result);
@@ -56,11 +56,11 @@ namespace Vehicle_Expense_Tracker.Controllers
 
         }
         [HttpDelete("Delete/{Id}")]
-        public async Task<IActionResult>DeleteCrane_Vehicle(int Id)
+        public async Task<IActionResult> DeleteCrane_Vehicle(int Id)
         {
             try
             {
-                var result=await _craneVehicle.DeleteCrane_Vehicle(Id);
+                var result = await _craneVehicle.DeleteCrane_Vehicle(Id);
                 if (result != null)
                 {
                     return Ok(result);
@@ -98,7 +98,28 @@ namespace Vehicle_Expense_Tracker.Controllers
             }
         }
 
-    }
+        [HttpGet("Detail/{Id}")]
+        public async Task<IActionResult> DetailCrane_Vehicle(int Id)
+        {
+            try
+            {
+                var result = await _craneVehicle.DetailCrane_Vehicle(Id);
+                if (result.status == "OK")
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ResponseResult("Internal Server Error", ex.Message));
+            }
+
+        }
 
     }
 
+}

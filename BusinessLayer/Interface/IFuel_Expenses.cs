@@ -14,5 +14,6 @@ namespace BusinessLayer.Interface
         public Task<ResponseResult> ListFuel_Expenses();
 
         public Task<ResponseResult> DeleteFuel_Expenses(int Id);
+        public Task<ResponseResult> DetailFuel_Expenses(int Id);
     }
 }

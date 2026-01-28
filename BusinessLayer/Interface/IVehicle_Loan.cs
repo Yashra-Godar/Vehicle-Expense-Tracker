@@ -15,6 +15,8 @@ namespace BusinessLayer.Interface
 
         public Task<ResponseResult> DeleteVehicle_Loan(int Id);
 
+        public Task<ResponseResult> DetailVehicle_Loan( int Id);
+
 
     }
 }

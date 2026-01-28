@@ -38,17 +38,28 @@ namespace DatabaseLayer.Repositories
             }
         }
 
-        public async Task<ResponseResult> ListCrane_Insurance()
+        public async Task<ResponseResult> DetailCrane_Insurance(int Id)
         {
             try
             {
-                var result = await _dbContext.tbl_CraneInsurance.Select(o=> new
+                var result = await _dbContext.tbl_CraneInsurance.Where(o => o.Id == Id).Select(o => new
                 {
                     o.Id,
-                    o.Crane_VehicleId,
-                    o.Crane_Vehicle!.Vehicle_Name,
-                    o.Staff_MasterId,
-                    o.Staff_Master!.FullName,
+                    vehicle = new
+                    {
+                        o.Crane_VehicleId,
+                        o.Crane_Vehicle!.Vehicle_Name,
+                        o.Crane_Vehicle!.Vehicle_No,
+                        o.Crane_Vehicle!.Max_Lifting_Height,
+                        o.Crane_Vehicle!.Capacity_Tons,
+                        o.Crane_Vehicle!.Make_by,
+                        o.Crane_Vehicle!.Manufacture_Year
+                    },
+                    staff = new
+                    {
+                        o.Staff_MasterId,
+                        o.Staff_Master!.FullName,
+                    },
                     o.Policy_No,
                     o.Insurance_Company,
                     o.Policy_Type,
@@ -58,7 +69,60 @@ namespace DatabaseLayer.Repositories
                     o.Premium_Frequency,
                     o.Agent_Name,
                     o.Agent_ContactNo,
-                    o.Remarks
+                    o.Remarks,
+                    o.Created_At
+                }).FirstOrDefaultAsync();
+                if (result != null)
+                {
+
+                    return new ResponseResult("OK", result);
+
+                }
+                else
+                {
+                    return new ResponseResult("Fail", "Not Found");
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ResponseResult("Fail", ex.Message);
+            }
+        }
+        
+
+        public async Task<ResponseResult> ListCrane_Insurance()
+        {
+            try
+            {
+                var result = await _dbContext.tbl_CraneInsurance.Select(o=> new
+                {
+                    o.Id,
+                    vehicle = new
+                    {
+                        o.Crane_VehicleId,
+                        o.Crane_Vehicle!.Vehicle_Name,
+                        o.Crane_Vehicle!.Vehicle_No,
+                        o.Crane_Vehicle!.Max_Lifting_Height,
+                        o.Crane_Vehicle!.Capacity_Tons,
+                        o.Crane_Vehicle!.Make_by,
+                        o.Crane_Vehicle!.Manufacture_Year
+                    },
+                    staff = new
+                    {
+                        o.Staff_MasterId,
+                        o.Staff_Master!.FullName,
+                    },
+                    o.Policy_No,
+                    o.Insurance_Company,
+                    o.Policy_Type,
+                    o.Start_Date,
+                    o.End_Date,
+                    o.Premium_Amount,
+                    o.Premium_Frequency,
+                    o.Agent_Name,
+                    o.Agent_ContactNo,
+                    o.Remarks,
+                    o.Created_At
                 }).ToListAsync();
                 return new ResponseResult("OK", result);
             }

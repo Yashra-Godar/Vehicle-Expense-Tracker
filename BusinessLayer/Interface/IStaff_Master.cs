@@ -14,6 +14,7 @@ namespace BusinessLayer.Interface
         public Task<ResponseResult> DeleteStaff_Master(int Id);
 
         public Task<ResponseResult> ListStaff_Master();
+        public Task<ResponseResult> DetailStaff_Master(int Id);
 
 
     }

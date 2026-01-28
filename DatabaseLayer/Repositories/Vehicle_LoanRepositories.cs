@@ -37,17 +37,34 @@ namespace DatabaseLayer.Repositories
             }
         }
 
-        public async Task<ResponseResult> ListVehicle_Loan()
+        public async Task<ResponseResult> DetailVehicle_Loan(int Id)
         {
             try
             {
-                var result=await _dbContext.tbl_VehicleLoan.Select(o=> new
+                var result = await _dbContext.tbl_VehicleLoan.Where(o => o.Id == Id).Select(o => new
                 {
                     o.Id,
-                    o.Crane_VehicleId,
-                    o.Crane_Vehicle!.Vehicle_Name,
-                    o.Staff_MasterId,
-                    o.Staff_Master!.FullName,
+                    vehicleType= new
+                    {
+                        o.Crane_Vehicle!.Vehicle_TypeId,
+                        o.Crane_Vehicle!.Vehicle_Type!.TypeName,
+
+                    },
+                    vehicle = new
+                    {
+                        o.Crane_VehicleId,
+                        o.Crane_Vehicle!.Vehicle_Name,
+                        o.Crane_Vehicle!.Vehicle_No,
+                        o.Crane_Vehicle!.Max_Lifting_Height,
+                        o.Crane_Vehicle!.Capacity_Tons,
+                        o.Crane_Vehicle!.Make_by,
+                        o.Crane_Vehicle!.Manufacture_Year
+                    },
+                    staff = new
+                    {
+                        o.Staff_MasterId,
+                        o.Staff_Master!.FullName,
+                    },
                     o.Loan_Provider,
                     o.Loan_Amount,
                     o.Interest_Rate,
@@ -55,7 +72,71 @@ namespace DatabaseLayer.Repositories
                     o.Start_Date,
                     o.Monthly_Installment,
                     o.Status,
-                    o.Contact_Detail
+                    o.Contact_Detail,
+                    o.Created_At,
+                    installments = o.loan_Installments.Select(l=> new
+                    {
+                        l.Id,
+                        l.Installment_Date,
+                        l.Amount_Paid,
+                        l.Payment_Method,
+                        l.Receipt_No
+                    }),
+                }).FirstOrDefaultAsync();
+                if (result != null)
+                {
+                    return new ResponseResult("OK", result);
+                }
+                else
+                {
+                    return new ResponseResult("Fail", "Not Found");
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ResponseResult("Fail", ex.Message);
+            }
+        }
+
+        public async Task<ResponseResult> ListVehicle_Loan()
+        {
+            try
+            {
+                var result=await _dbContext.tbl_VehicleLoan.Select(o=> new
+                {
+                    o.Id,
+                    vehicle = new
+                    {
+                        o.Crane_VehicleId,
+                        o.Crane_Vehicle!.Vehicle_Name,
+                        o.Crane_Vehicle!.Max_Lifting_Height,
+                        o.Crane_Vehicle!.Capacity_Tons,
+                        o.Crane_Vehicle!.Make_by,
+                        o.Crane_Vehicle!.Manufacture_Year
+                    },
+                    staff = new
+                    {
+                        o.Staff_MasterId,
+                        o.Staff_Master!.FullName,
+                    },
+                    o.Loan_Provider,
+                    o.Loan_Amount,
+                    o.Interest_Rate,
+                    o.Term_Month,
+                    o.Start_Date,
+                    o.Monthly_Installment,
+                    o.Status,
+                    o.Contact_Detail,
+                    o.Created_At,
+                    installments = o.loan_Installments.Select(l => new
+                    {
+                        l.Id,
+                        l.Installment_Date,
+                        l.Amount_Paid,
+                        l.Payment_Method,
+                        l.Receipt_No
+                    }),
+
                 }).ToListAsync();
                 return new ResponseResult("OK", result);            
             }

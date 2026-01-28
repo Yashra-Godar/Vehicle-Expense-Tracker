@@ -37,7 +37,55 @@ namespace DatabaseLayer.Repositories
                 return new ResponseResult("Fail", ex.Message);
             }
         }
-        
+
+        public async Task<ResponseResult> DetailCraneOtherExpenses(int Id)
+        {
+            try
+            {
+                var result = await _dbContext.craneOtherExpenses.Where(o => o.Id == Id).Select(o => new
+                {
+                    o.Id,
+                    vehicle = new
+                    {
+                        o.Crane_VehicleId,
+                        o.Crane_Vehicle!.Vehicle_Name,
+                        o.Crane_Vehicle!.Vehicle_No,
+                        o.Crane_Vehicle!.Max_Lifting_Height,
+                        o.Crane_Vehicle!.Capacity_Tons,
+                        o.Crane_Vehicle!.Make_by,
+                        o.Crane_Vehicle!.Manufacture_Year
+                    },
+                    staff = new
+                    {
+                        o.Staff_MasterId,
+                        o.Staff_Master!.FullName,
+                    },
+                    o.Expense_Type,
+                    o.Amount,
+                    o.Expense_Date,
+                    o.Paid_To,
+                    o.Reference_No,
+                    o.Description,
+                    o.Payment_Mode,
+                    o.Created_At
+                }).FirstOrDefaultAsync();
+                if (result != null)
+                {
+
+                    return new ResponseResult("OK", result);
+
+                }
+                else
+                {
+                    return new ResponseResult("Fail", "Not Found");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return new ResponseResult("Fail", ex.Message);
+            }
+        }
 
         public async Task<ResponseResult> ListCraneOtherExpenses()
         {
@@ -46,17 +94,29 @@ namespace DatabaseLayer.Repositories
                 var result = await _dbContext.craneOtherExpenses.Select(o => new
                 {
                     o.Id,
-                    o.Crane_VehicleId,
-                    o.Crane_Vehicle!.Vehicle_Name,
-                    o.Staff_MasterId,
-                    o.Staff_Master!.FullName,
+                    vehicle = new
+                    {
+                        o.Crane_VehicleId,
+                        o.Crane_Vehicle!.Vehicle_Name,
+                        o.Crane_Vehicle!.Vehicle_No,
+                        o.Crane_Vehicle!.Max_Lifting_Height,
+                        o.Crane_Vehicle!.Capacity_Tons,
+                        o.Crane_Vehicle!.Make_by,
+                        o.Crane_Vehicle!.Manufacture_Year
+                    },
+                    staff = new
+                    {
+                        o.Staff_MasterId,
+                        o.Staff_Master!.FullName,
+                    },
                     o.Expense_Type,
                     o.Amount,
                     o.Expense_Date,
                     o.Paid_To,
                     o.Reference_No,
                     o.Description,
-                    o.Payment_Mode
+                    o.Payment_Mode,
+                    o.Created_At
                 }).ToListAsync();
                 return new ResponseResult("OK", result);
             }
