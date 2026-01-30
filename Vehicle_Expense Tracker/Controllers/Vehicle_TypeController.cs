@@ -39,7 +39,7 @@ namespace Vehicle_Expense_Tracker.Controllers
         {
             try
             {
-                var result=await _manageVehicle.UpdateVehicle_Type(Id, vehicle_Type);
+                var result = await _manageVehicle.UpdateVehicle_Type(Id, vehicle_Type);
                 if (result.status == "OK")
                 {
                     return Ok(result);
@@ -51,7 +51,7 @@ namespace Vehicle_Expense_Tracker.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500,new ResponseResult("Internal Server Error",ex.Message));
+                return StatusCode(500, new ResponseResult("Internal Server Error", ex.Message));
             }
         }
         [HttpDelete("Delete/{Id}")]
@@ -59,8 +59,8 @@ namespace Vehicle_Expense_Tracker.Controllers
         {
             try
             {
-                var result=await _manageVehicle.DeleteVehicle_Type(Id);
-                if(result.status == "OK")
+                var result = await _manageVehicle.DeleteVehicle_Type(Id);
+                if (result.status == "OK")
                 {
                     return Ok(result);
                 }
@@ -69,7 +69,7 @@ namespace Vehicle_Expense_Tracker.Controllers
                     return BadRequest(result);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return StatusCode(500, new ResponseResult("Internal Server Error", ex.Message));
             }
@@ -81,8 +81,8 @@ namespace Vehicle_Expense_Tracker.Controllers
         {
             try
             {
-                var result=await _manageVehicle.ListVehicle_Type();
-                if(result.status == "OK")
+                var result = await _manageVehicle.ListVehicle_Type();
+                if (result.status == "OK")
                 {
                     return Ok(result);
                 }
@@ -97,6 +97,6 @@ namespace Vehicle_Expense_Tracker.Controllers
             }
         }
 
-        }
     }
+}
 
