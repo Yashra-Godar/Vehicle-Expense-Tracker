@@ -2,14 +2,7 @@ using BusinessLayer.Interface;
 using DatabaseLayer;
 using DatabaseLayer.Repositories;
 
-
-
 var builder = WebApplication.CreateBuilder(args);
-var port = Environment.GetEnvironmentVariable("PORT") ?? "80";
-
-
-builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
-
 builder.Services.AddScoped<IVehicle_Type,Vehicle_TypeRepositories>();
 builder.Services.AddScoped<ICrane_Vehicle, Crane_VehicleRepositories>();
 builder.Services.AddScoped<IService_Master,Service_MasterRepositories>();

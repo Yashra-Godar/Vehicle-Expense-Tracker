@@ -1,0 +1,12 @@
+{
+  "region": "ap-south-1",
+  "configuration": "Debug",
+  "framework": "net10.0",
+  "self-contained": true,
+  "application": "VehicleExpenseTracker",
+  "environment": "VehicleExpenseTracker-dev",
+  "enable-xray": true,
+  "enhanced-health-type": "enhanced",
+  "additional-options": "",
+  "proxy-server": "nginx"
+}
