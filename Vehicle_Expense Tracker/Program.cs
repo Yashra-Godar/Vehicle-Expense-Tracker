@@ -25,6 +25,8 @@ builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();  // Generates OpenAPI JSON
 var app = builder.Build();
 
+
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
