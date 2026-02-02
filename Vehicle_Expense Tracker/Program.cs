@@ -23,6 +23,17 @@ builder.Services.AddDBService();
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddSwaggerGen();  // Generates OpenAPI JSON
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowReactApp", policy =>
+    {
+        policy
+            .AllowAnyOrigin()    // or specific origin (recommended below)
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
 var app = builder.Build();
 
 
@@ -35,7 +46,9 @@ if (app.Environment.IsDevelopment())
 }
 //app.UseHttpsRedirection();
 
+app.UseCors("AllowReactApp");   
 app.UseAuthorization();
+
 
 app.MapControllers();
 
