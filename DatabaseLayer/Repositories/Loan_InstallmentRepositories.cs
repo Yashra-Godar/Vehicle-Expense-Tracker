@@ -45,13 +45,21 @@ namespace DatabaseLayer.Repositories
             {
                 var result = await _dbContext.tbl_LoanInstallment.Select(o=> new
                 {
+
                     o.Id,
-                    o.Vehicle_LoanId,
-                    o.Vehicle_Loan!.Loan_Provider,
-                    o.Vehicle_Loan!.Loan_Amount,
-                    o.Vehicle_Loan!.Monthly_Installment,
-                    o.Staff_MasterId,
-                    o.Staff_Master!.FullName,
+                    VehicleLoan = new
+                    {
+                        o.Vehicle_LoanId,
+                        o.Vehicle_Loan!.Loan_Provider,
+                        o.Vehicle_Loan!.Loan_Amount,
+                        o.Vehicle_Loan!.Monthly_Installment,
+                    },
+                    Staff= new
+                    {
+                        o.Staff_MasterId,
+                        o.Staff_Master!.FullName,
+                    },
+                    
                     o.Amount_Paid,
                     o.Payment_Method,
                     o.Receipt_No,
