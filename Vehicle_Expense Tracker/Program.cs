@@ -25,7 +25,7 @@ builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();  // Generates OpenAPI JSON
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowReactApp", policy =>
+    options.AddPolicy("AllowAll", policy =>
     {
         policy
             .AllowAnyOrigin()    // or specific origin (recommended below)
@@ -46,9 +46,8 @@ if (app.Environment.IsDevelopment())
 }
 //app.UseHttpsRedirection();
 
-app.UseCors("AllowReactApp");   
+app.UseCors("AllowAll");   
 app.UseAuthorization();
-
 
 app.MapControllers();
 
