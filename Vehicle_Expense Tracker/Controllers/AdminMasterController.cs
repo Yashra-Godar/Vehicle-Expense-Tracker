@@ -1,6 +1,7 @@
 ﻿using BusinessLayer.Interface;
 using BusinessLayer.Model;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Vehicle_Expense_Tracker.Controllers
@@ -102,6 +103,19 @@ namespace Vehicle_Expense_Tracker.Controllers
                     return BadRequest(result);
                 }
 
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ResponseResult("Internal Server Error", ex.Message));
+            }
+        }
+
+        [HttpGet("Welcome")]
+        public IActionResult welcome()
+        {
+            try
+            {
+                return Ok("Welcome to Amrit Crane Vehicle Expense Tracker");
             }
             catch (Exception ex)
             {
