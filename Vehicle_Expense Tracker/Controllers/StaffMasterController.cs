@@ -141,14 +141,12 @@ namespace Vehicle_Expense_Tracker.Controllers
         {
             string plainPassword = PasswordHelper.GeneratePassword();
 
-            // 2️⃣ Hash Password
+            
             staff_Master.Password = PasswordHelper.HashPassword(plainPassword);
             staff_Master.Created_At = DateTime.Now;
 
-            // 3️⃣ Save to Database
             await _Master.CreateStaff_Master(staff_Master);
 
-            // 4️⃣ Send Email
 
             EmailService emailService = new EmailService();
             emailService.SendCredentials(staff_Master.Email, staff_Master.FullName, plainPassword);
