@@ -1,8 +1,11 @@
 ﻿using Azure.Core;
 using BusinessLayer.Interface;
 using BusinessLayer.Model;
+using DatabaseLayer.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Vehicle_Expense_Tracker.Helper;
+using Vehicle_Expense_Tracker.Services;
 
 namespace Vehicle_Expense_Tracker.Controllers
 {
@@ -131,5 +134,31 @@ namespace Vehicle_Expense_Tracker.Controllers
 
             }
         }
+
+        [HttpPost("Create")]
+
+        public async Task <IActionResult> CreateStaff([FromBody] Staff_Master staff_Master)
+        {
+            string plainPassword = PasswordHelper.GeneratePassword();
+
+            // 2️⃣ Hash Password
+            staff_Master.Password = PasswordHelper.HashPassword(plainPassword);
+            staff_Master.Created_At = DateTime.Now;
+
+            // 3️⃣ Save to Database
+            await _Master.CreateStaff_Master(staff_Master);
+
+            // 4️⃣ Send Email
+
+            EmailService emailService = new EmailService();
+            emailService.SendCredentials(staff_Master.Email, staff_Master.FullName, plainPassword);
+
+
+
+            return Ok(new { message = "Staff created and credentials emailed." });
+
+        }
+
+
     }
 }

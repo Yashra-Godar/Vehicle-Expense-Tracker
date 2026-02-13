@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace DatabaseLayer.Repositories
 {
@@ -16,6 +17,22 @@ namespace DatabaseLayer.Repositories
         {
             _dbContext= dbContext;
         }
+
+        public async  Task<ResponseResult> CreateStaff_Master(Staff_Master staff_master)
+        {
+            try
+            {
+                _dbContext.tbl_Staff_Master.Add(staff_master);
+                await _dbContext.SaveChangesAsync();
+                return new ResponseResult("OK", "Staff account created Successfully and login credentials send to email");
+            
+        }
+            catch (Exception ex)
+            {
+                return new ResponseResult("Fail", ex.Message);
+            }
+        }
+
         public async Task<ResponseResult> DeleteStaff_Master(int Id)
         {
             try

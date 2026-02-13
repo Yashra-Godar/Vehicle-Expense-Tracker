@@ -60,6 +60,8 @@ namespace BusinessLayer.Model
 
         public string? Remarks { get; set; }
 
+        public string Status {  get; set; } = string.Empty;
+
         public ICollection<Vehicle_Loan> Loan { get; set; }
 
         public ICollection<Service_Master> service_Masters { get; set; }    
