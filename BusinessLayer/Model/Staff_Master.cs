@@ -32,7 +32,7 @@ namespace BusinessLayer.Model
 
         public bool IsActive { get; set; }
 
-        public DateTime Created_At { get; set; }
+        public DateTime Created_At { get; set; } = DateTime.Now;
 
         public ICollection<Crane_Vehicle> crane_Vehicles { get; set; }
 
