@@ -37,5 +37,7 @@ namespace DatabaseLayer.ApplicationContext
         public DbSet<Staff_Master> tbl_Staff_Master { get;set; }
 
         public DbSet<Admin_Master> tbl_Admin_Master { get; set;}
+
+        public DbSet<ServiceCentre> tbl_ServiceCentre { get;  set ; }
     }
 }
