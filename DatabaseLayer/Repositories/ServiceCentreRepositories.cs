@@ -57,7 +57,6 @@ namespace DatabaseLayer.Repositories
         {
             try
             {
-
                 var result = await _dbContext.tbl_ServiceCentre.Select(o => new
                 {
                     o.Id,
@@ -67,7 +66,7 @@ namespace DatabaseLayer.Repositories
                     o.Email,
                     o.CreatedAt
                 }).ToListAsync();
-                await _dbContext.SaveChangesAsync();
+            
                 return new ResponseResult("OK", result);
             }
             catch (Exception ex)

@@ -66,13 +66,8 @@ namespace DatabaseLayer.Repositories
                         o.Staff_Master!.FullName,
                     },
 
-                    o.Service_Date,
-                    o.Service_Type,
-                    o.Performed_By,
-                    o.Remark,
-                    o.Cost,
-                    o.Created_At,
-                    serviceParts = o.service_Parts.Select(o=> new
+                   
+                    serviceParts = o.service_Parts.Select(o => new
                     {
                         o.Id,
                         o.Parts_Name,
@@ -81,8 +76,27 @@ namespace DatabaseLayer.Repositories
                         o.Total_Cost,
                         o.Created_At
                     }),
+                    serviceCentre = new
+                    {
+
+                        o.ServiceCentreId,
+                        o.ServiceCentre!.Name,
+                        o.ServiceCentre!.Address,
+                        o.ServiceCentre!.ContactNo,
+                        o.ServiceCentre!.Email,
+                        o.ServiceCentre!.CreatedAt,
+
+                    },
+                    o.Service_Date,
+                    o.Service_Type,
+                    o.Performed_By,
+                    o.Remark,
+                    o.Cost,
+                    o.Created_At,
 
                 }).FirstOrDefaultAsync();
+
+
                 if (result != null)
                 {
                     
@@ -125,7 +139,29 @@ namespace DatabaseLayer.Repositories
                         o.Staff_MasterId,
                         o.Staff_Master!.FullName,
                     },
+                    serviceParts = o.service_Parts.Select(o => new
+                    {
+                        o.Id,
+                        o.Parts_Name,
+                        o.Qty,
+                        o.Unit_Cost,
+                        o.Total_Cost,
+                        o.Created_At
+                    }),
                     
+
+                  
+                    serviceCentre = new
+                    {
+
+                        o.ServiceCentreId,
+                        o.ServiceCentre!.Name,
+                        o.ServiceCentre!.Address,
+                        o.ServiceCentre!.ContactNo,
+                        o.ServiceCentre!.Email,
+                        o.ServiceCentre!.CreatedAt,
+
+                    },
                     o.Service_Date,
                     o.Service_Type,
                     o.Performed_By,

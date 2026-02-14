@@ -8,6 +8,10 @@ namespace BusinessLayer.Model
 {
     public class ServiceCentre
     {
+        public ServiceCentre()
+        {
+            service_Masters = new HashSet<Service_Master>();
+        }
         public int Id { get; set; }
 
         public string Name { get; set; }=string.Empty;
@@ -19,6 +23,8 @@ namespace BusinessLayer.Model
         public string? Email { get; set; }
 
         public DateTime CreatedAt { get; set; }= DateTime.Now;
+
+        public ICollection<Service_Master> service_Masters { get; set; }    
 
 
     }

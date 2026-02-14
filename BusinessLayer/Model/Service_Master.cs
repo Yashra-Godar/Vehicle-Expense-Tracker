@@ -9,6 +9,7 @@ namespace BusinessLayer.Model
         public Service_Master()
         {
             service_Parts = new HashSet<Service_Parts>();
+            
         }
         public int Id { get; set; }
         
@@ -20,7 +21,9 @@ namespace BusinessLayer.Model
 
         public int Staff_MasterId { get; set; }
 
+        public virtual ServiceCentre ? ServiceCentre { get; set; }   
 
+        public int ServiceCentreId { get; set; }    
         public DateTime Service_Date { get; set; }= DateTime.Now;
 
         public string Service_Type { get; set; }= string.Empty;
@@ -36,5 +39,7 @@ namespace BusinessLayer.Model
         public DateTime Updated_At { get; set; } = DateTime.Now;
 
         public ICollection<Service_Parts> service_Parts { get; set; }
+
+       
     }
 }

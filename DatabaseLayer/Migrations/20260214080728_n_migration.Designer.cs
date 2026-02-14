@@ -4,6 +4,7 @@ using DatabaseLayer.ApplicationContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DatabaseLayer.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20260214080728_n_migration")]
+    partial class n_migration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -481,7 +484,12 @@ namespace DatabaseLayer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Service_MasterId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("Service_MasterId");
 
                     b.ToTable("tbl_ServiceCentre");
                 });
@@ -510,9 +518,6 @@ namespace DatabaseLayer.Migrations
                     b.Property<string>("Remark")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ServiceCentreId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("Service_Date")
                         .HasColumnType("datetime2");
 
@@ -529,8 +534,6 @@ namespace DatabaseLayer.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("Crane_VehicleId");
-
-                    b.HasIndex("ServiceCentreId");
 
                     b.HasIndex("Staff_MasterId");
 
@@ -829,17 +832,22 @@ namespace DatabaseLayer.Migrations
                     b.Navigation("Vehicle_Loan");
                 });
 
+            modelBuilder.Entity("BusinessLayer.Model.ServiceCentre", b =>
+                {
+                    b.HasOne("BusinessLayer.Model.Service_Master", "Service_Master")
+                        .WithMany("serviceCentres")
+                        .HasForeignKey("Service_MasterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Service_Master");
+                });
+
             modelBuilder.Entity("BusinessLayer.Model.Service_Master", b =>
                 {
                     b.HasOne("BusinessLayer.Model.Crane_Vehicle", "Crane_Vehicle")
                         .WithMany("service_Masters")
                         .HasForeignKey("Crane_VehicleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BusinessLayer.Model.ServiceCentre", "ServiceCentre")
-                        .WithMany("service_Masters")
-                        .HasForeignKey("ServiceCentreId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -850,8 +858,6 @@ namespace DatabaseLayer.Migrations
                         .IsRequired();
 
                     b.Navigation("Crane_Vehicle");
-
-                    b.Navigation("ServiceCentre");
 
                     b.Navigation("Staff_Master");
                 });
@@ -916,13 +922,10 @@ namespace DatabaseLayer.Migrations
                     b.Navigation("service_Masters");
                 });
 
-            modelBuilder.Entity("BusinessLayer.Model.ServiceCentre", b =>
-                {
-                    b.Navigation("service_Masters");
-                });
-
             modelBuilder.Entity("BusinessLayer.Model.Service_Master", b =>
                 {
+                    b.Navigation("serviceCentres");
+
                     b.Navigation("service_Parts");
                 });
 
