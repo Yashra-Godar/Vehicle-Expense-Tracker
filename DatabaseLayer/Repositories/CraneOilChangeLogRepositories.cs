@@ -72,8 +72,7 @@ namespace DatabaseLayer.Repositories
                     o.Oil_Qty,
                     o.Unit,
                     o.Meter_Reading,
-                    o.Change_Date,
-                    o.NextDue_Date,
+                 
                     o.Changed_By,
                     o.Remarks,
                     o.Created_At
@@ -125,8 +124,7 @@ namespace DatabaseLayer.Repositories
                     o.Oil_Qty,
                     o.Unit,
                     o.Meter_Reading,
-                    o.Change_Date,
-                    o.NextDue_Date,
+                    
                     o.Changed_By,
                     o.Remarks,
                     o.Created_At,
@@ -193,8 +191,6 @@ namespace DatabaseLayer.Repositories
                     result.Oil_Qty = craneOilChangeLog.Oil_Qty;
                     result.Unit=craneOilChangeLog.Unit;
                     result.Meter_Reading=craneOilChangeLog.Meter_Reading;
-                    result.Change_Date = craneOilChangeLog.Change_Date;
-                    result.NextDue_Date = craneOilChangeLog.NextDue_Date;
                     result.Changed_By=craneOilChangeLog.Changed_By;
                     result.Remarks = craneOilChangeLog.Remarks;
 

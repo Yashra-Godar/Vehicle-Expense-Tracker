@@ -26,9 +26,6 @@ namespace BusinessLayer.Model
 
         public decimal Meter_Reading { get; set; }
 
-        public DateTime Change_Date { get; set; } = DateTime.Now;
-        public DateTime NextDue_Date { get; set; } = DateTime.Now;
-
         public string Changed_By { get; set; }= string.Empty;
 
         public string Remarks { get; set; } = string.Empty;

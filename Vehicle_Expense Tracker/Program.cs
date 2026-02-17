@@ -18,6 +18,7 @@ builder.Services.AddScoped<IStaff_Master,Staff_MasterRepositories>();
 builder.Services.AddScoped<IAdmin_Master,Admin_MasterRepositories>();
 builder.Services.AddScoped<IServiceCentre, ServiceCentreRepositories>();
 
+
 builder.Services.AddDBService();
 
 // Add services to the container.
