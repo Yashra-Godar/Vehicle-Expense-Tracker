@@ -1,6 +1,7 @@
 using BusinessLayer.Interface;
 using DatabaseLayer;
 using DatabaseLayer.Repositories;
+using Vehicle_Expense_Tracker.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<IVehicle_Type,Vehicle_TypeRepositories>();
@@ -17,6 +18,9 @@ builder.Services.AddScoped<IInsurance_Premium, InsurancePremiumRepositories>();
 builder.Services.AddScoped<IStaff_Master,Staff_MasterRepositories>();
 builder.Services.AddScoped<IAdmin_Master,Admin_MasterRepositories>();
 builder.Services.AddScoped<IServiceCentre, ServiceCentreRepositories>();
+builder.Services.AddScoped <EmailService>();
+builder.Services.AddScoped<AdminEmailServices>();
+
 
 
 builder.Services.AddDBService();

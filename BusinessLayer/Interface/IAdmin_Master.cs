@@ -17,6 +17,8 @@ namespace BusinessLayer.Interface
 
         public Task<ResponseResult> DetailAdmin_Master(int Id);
 
+        public Task<ResponseResult>Create_AdminMaster(Admin_Master admin_Master);
+
 
 
     }

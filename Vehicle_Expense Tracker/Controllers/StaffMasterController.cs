@@ -14,10 +14,14 @@ namespace Vehicle_Expense_Tracker.Controllers
     public class StaffMasterController : ControllerBase
     {
         private readonly IStaff_Master _Master;
-        public StaffMasterController(IStaff_Master Master)
+        private readonly EmailService _emailService;
+        
+        public StaffMasterController(IStaff_Master Master,EmailService emailService)
         {
             _Master = Master;
+            _emailService = emailService;
         }
+        
 
 
         [HttpPost("Save")]
@@ -148,8 +152,8 @@ namespace Vehicle_Expense_Tracker.Controllers
             await _Master.CreateStaff_Master(staff_Master);
 
 
-            EmailService emailService = new EmailService();
-            emailService.SendCredentials(staff_Master.Email, staff_Master.FullName, plainPassword);
+            
+            _emailService.SendCredentials(staff_Master.Email, staff_Master.FullName, plainPassword);
 
 
 

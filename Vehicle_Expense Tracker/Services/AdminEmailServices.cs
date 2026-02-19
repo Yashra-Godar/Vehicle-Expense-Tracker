@@ -1,14 +1,13 @@
 ﻿using System.Net;
 using System.Net.Mail;
-using Microsoft.Extensions.Configuration;
 
 namespace Vehicle_Expense_Tracker.Services
 {
-    public class EmailService
+    public class AdminEmailServices
     {
         private readonly IConfiguration _configuration;
 
-        public EmailService(IConfiguration configuration)
+        public AdminEmailServices(IConfiguration configuration)
         {
             _configuration = configuration;
         }
@@ -24,11 +23,11 @@ namespace Vehicle_Expense_Tracker.Services
             var message = new MailMessage();
             message.From = new MailAddress(fromEmail);
             message.To.Add(Email);
-            message.Subject = "Staff Login Credentials";
+            message.Subject = "Admin Login Credentials";
             message.Body = $@"
 Hello {fullName},
 
-Your staff account has been created.
+Your Admin account has been created.
 
 Login Email: {Email}
 Password: {password}
@@ -46,3 +45,6 @@ Please change your password after first login.
         }
     }
 }
+
+    
+

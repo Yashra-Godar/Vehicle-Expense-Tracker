@@ -15,6 +15,22 @@ namespace DatabaseLayer.Repositories
         {
             _dbContext = dbContext;
         }
+
+        public async Task<ResponseResult> Create_AdminMaster(Admin_Master admin_Master)
+        {
+            try
+            {
+                _dbContext.tbl_Admin_Master.Add(admin_Master);
+                await _dbContext.SaveChangesAsync();
+                return new ResponseResult("OK", "Admin account created Successfully and login credentials send to email");
+
+            }
+            catch (Exception ex)
+            {
+                return new ResponseResult("Fail", ex.Message);
+            }
+        }
+
         public async Task<ResponseResult> DeleteAdmin_Master(int Id)
         {
             try

@@ -3,6 +3,8 @@ using BusinessLayer.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Vehicle_Expense_Tracker.Helper;
+using Vehicle_Expense_Tracker.Services;
 
 namespace Vehicle_Expense_Tracker.Controllers
 {
@@ -11,9 +13,11 @@ namespace Vehicle_Expense_Tracker.Controllers
     public class AdminMasterController : ControllerBase
     {
         private readonly IAdmin_Master _Master;
-        public AdminMasterController(IAdmin_Master Master)
+        private readonly AdminEmailServices _adminEmail;
+        public AdminMasterController(IAdmin_Master Master, AdminEmailServices adminEmail)
         {
             _Master = Master;
+            _adminEmail = adminEmail;
         }
 
         [HttpPost("Save")]
@@ -145,5 +149,29 @@ namespace Vehicle_Expense_Tracker.Controllers
                 return StatusCode(500, new ResponseResult("Internal Server Error", ex.Message));
             }
         }
+
+        [HttpPost("Create")]
+
+        public async Task<IActionResult> CreateAdmin_Master([FromBody] Admin_Master admin_Master)
+        {
+            string plainPassword = PasswordHelper.GeneratePassword();
+
+            admin_Master.Password = PasswordHelper.HashPassword(plainPassword);
+            
+
+            await _Master.Create_AdminMaster(admin_Master);
+
+            // ✅ Use injected service
+             
+            _adminEmail.SendCredentials(
+                admin_Master.Email,
+                admin_Master.FullName,
+                plainPassword
+            );
+
+            return Ok(new { message = "Admin created and credentials emailed." });
+        }
+
+
     }
 }
