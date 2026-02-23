@@ -114,19 +114,6 @@ namespace Vehicle_Expense_Tracker.Controllers
             }
         }
 
-        [HttpGet("Welcome")]
-        public IActionResult welcome()
-        {
-            try
-            {
-                return Ok("Welcome to Amrit Crane Vehicle Expense Tracker");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new ResponseResult("Internal Server Error", ex.Message));
-            }
-        }
-
 
         [HttpGet("Detail/{Id}")]
         public async Task<IActionResult> DetailAdmin_Master(int Id)
