@@ -161,7 +161,7 @@ namespace Vehicle_Expense_Tracker.Controllers
 
         }
         [HttpPost("Login")]
-        public async Task<IActionResult> StaffLogin([FromBody] AdminLoginDTO model)
+        public async Task<IActionResult> StaffLogin([FromBody] StaffLoginDTO model)
         {
             try
             {
