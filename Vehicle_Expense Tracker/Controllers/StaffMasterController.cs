@@ -160,7 +160,37 @@ namespace Vehicle_Expense_Tracker.Controllers
             return Ok(new { message = "Staff created and credentials emailed." });
 
         }
+        [HttpPost("Login")]
+        public async Task<IActionResult> StaffLogin([FromBody] AdminLoginDTO model)
+        {
+            try
+            {
+                var result = await _Master.StaffLogin(model.Email, model.Password);
+
+                if (result.status == "OK")
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return Unauthorized(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ResponseResult("Internal Server Error", ex.Message));
+            }
+        }
 
 
     }
+
+    public class StaffLoginDTO
+    {
+        public string Email { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+    }
 }
+
+
+    

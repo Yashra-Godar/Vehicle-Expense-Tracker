@@ -17,8 +17,9 @@ namespace BusinessLayer.Interface
         public Task<ResponseResult> DetailStaff_Master(int Id);
 
         public Task<ResponseResult> CreateStaff_Master(Staff_Master staff_master);
-            
-            
+        Task<ResponseResult> StaffLogin(string email, string password);
+
+
 
 
     }

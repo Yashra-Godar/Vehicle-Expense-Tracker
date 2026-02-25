@@ -144,6 +144,21 @@ namespace DatabaseLayer.Repositories
 
         }
 
+        public async Task<ResponseResult> StaffLogin(string email, string password)
+        {
+            var staff = await _dbContext.tbl_Staff_Master.FirstOrDefaultAsync(x => x.Email == email && x.Password == password);
+
+            if (staff == null)
+                return new ResponseResult("ERROR", "Invalid email or password");
+
+            return new ResponseResult("OK", new
+            {
+                staff.Id,
+                staff.FullName,
+                staff.Email
+            });
+        }
+
         public async Task<ResponseResult> UpdateStaff_Master(int Id, Staff_Master staff_master)
         {
             try
