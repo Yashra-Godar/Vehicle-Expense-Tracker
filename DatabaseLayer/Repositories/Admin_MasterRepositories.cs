@@ -167,6 +167,21 @@ namespace DatabaseLayer.Repositories
             }
 
         }
+
+        public async Task<ResponseResult> AdminLogin(string email, string password)
+        {
+            var admin = await _dbContext.tbl_Admin_Master.FirstOrDefaultAsync(x => x.Email == email && x.Password == password);
+
+            if (admin == null)
+                return new ResponseResult("ERROR", "Invalid email or password");
+
+            return new ResponseResult("OK", new
+            {
+                admin.Id,
+                admin.FullName,
+                admin.Email
+            });
+        }
     }
 }
 

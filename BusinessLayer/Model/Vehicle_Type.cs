@@ -11,10 +11,6 @@ namespace BusinessLayer.Model
         public Vehicle_Type()
         {
             Crane_Vehicles = new HashSet<Crane_Vehicle>();
-           
-
-            
-                          
         }
         public int Id { get; set; }
 

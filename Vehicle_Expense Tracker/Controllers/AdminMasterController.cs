@@ -159,6 +159,34 @@ namespace Vehicle_Expense_Tracker.Controllers
             return Ok(new { message = "Admin created and credentials emailed." });
         }
 
+        [HttpPost("Login")]
+        public async Task<IActionResult> AdminLogin([FromBody] AdminLoginDTO model)
+        {
+            try
+            {
+                var result = await _Master.AdminLogin(model.Email, model.Password);
 
+                if (result.status == "OK")
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return Unauthorized(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ResponseResult("Internal Server Error", ex.Message));
+            }
+        }
+
+
+    }
+
+    public class AdminLoginDTO
+    {
+        public string Email { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
     }
 }
