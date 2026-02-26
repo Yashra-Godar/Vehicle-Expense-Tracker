@@ -1,4 +1,5 @@
-﻿using BusinessLayer.Interface;
+﻿using BusinessLayer.Helper;
+using BusinessLayer.Interface;
 using BusinessLayer.Model;
 using DatabaseLayer.ApplicationContext;
 using Microsoft.EntityFrameworkCore;
@@ -152,7 +153,7 @@ namespace DatabaseLayer.Repositories
                     result.FullName = admin_Master.FullName;
                     result.ContactNo=admin_Master.ContactNo;
                     result.Email = admin_Master.Email;
-                    result.Password = admin_Master.Password;
+                    result.Password = PasswordHelper.HashPassword(admin_Master.Password);
                     await _dbContext.SaveChangesAsync();
                     return new ResponseResult("OK", "Data Updated Successfully");
                 }

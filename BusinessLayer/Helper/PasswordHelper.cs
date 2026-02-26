@@ -1,7 +1,11 @@
-﻿using System.Security.Cryptography;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 
-namespace Vehicle_Expense_Tracker.Helper
+namespace BusinessLayer.Helper
 {
     public static class PasswordHelper
     {
@@ -35,4 +39,7 @@ namespace Vehicle_Expense_Tracker.Helper
     }
 
 }
+
+
+    
 

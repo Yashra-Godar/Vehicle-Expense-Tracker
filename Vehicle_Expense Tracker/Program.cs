@@ -1,3 +1,4 @@
+using BusinessLayer.Helper;
 using BusinessLayer.Interface;
 using DatabaseLayer;
 using DatabaseLayer.Repositories;
@@ -20,6 +21,7 @@ builder.Services.AddScoped<IAdmin_Master,Admin_MasterRepositories>();
 builder.Services.AddScoped<IServiceCentre, ServiceCentreRepositories>();
 builder.Services.AddScoped <EmailService>();
 builder.Services.AddScoped<AdminEmailServices>();
+
 
 
 

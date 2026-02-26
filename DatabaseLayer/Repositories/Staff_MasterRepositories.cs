@@ -1,4 +1,5 @@
-﻿using BusinessLayer.Interface;
+﻿using BusinessLayer.Helper;
+using BusinessLayer.Interface;
 using BusinessLayer.Model;
 using DatabaseLayer.ApplicationContext;
 using Microsoft.EntityFrameworkCore;
@@ -169,7 +170,7 @@ namespace DatabaseLayer.Repositories
                     result.FullName= staff_master.FullName;
                     result.ContactNo=staff_master.ContactNo;
                     result.Email= staff_master.Email;
-                    result.Password= staff_master.Password;
+                    result.Password = PasswordHelper.HashPassword(staff_master.Password);
                     result.IsActive=staff_master.IsActive;
                     
                     await _dbContext.SaveChangesAsync();
