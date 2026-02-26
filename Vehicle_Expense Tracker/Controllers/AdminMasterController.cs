@@ -144,12 +144,12 @@ namespace Vehicle_Expense_Tracker.Controllers
             string plainPassword = PasswordHelper.GeneratePassword();
 
             admin_Master.Password = PasswordHelper.HashPassword(plainPassword);
-            
+
 
             await _Master.Create_AdminMaster(admin_Master);
 
             // ✅ Use injected service
-             
+
             _adminEmail.SendCredentials(
                 admin_Master.Email,
                 admin_Master.FullName,
@@ -181,7 +181,23 @@ namespace Vehicle_Expense_Tracker.Controllers
             }
         }
 
+        [HttpPost("ChangePassword")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDTO model)
+        {
+            try
+            {
+                var result = await _Master.ChangePassword(model);
 
+                if (result.status == "OK")
+                    return Ok(result);
+
+                return BadRequest(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ResponseResult("Internal Server Error", ex.Message));
+            }
+        }
     }
 
     public class AdminLoginDTO
@@ -189,4 +205,5 @@ namespace Vehicle_Expense_Tracker.Controllers
         public string Email { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
     }
+    
 }

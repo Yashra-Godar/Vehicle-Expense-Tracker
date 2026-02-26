@@ -68,7 +68,7 @@ namespace DatabaseLayer.Repositories
                     o.ContactNo,
                     o.Email,
                     o.Password
-                    
+
                 }).FirstOrDefaultAsync();
                 if (result != null)
                 {
@@ -93,7 +93,7 @@ namespace DatabaseLayer.Repositories
             try
             {
 
-                var result = await _dbContext.tbl_Admin_Master.Select(o=> new
+                var result = await _dbContext.tbl_Admin_Master.Select(o => new
                 {
                     o.Id,
                     o.FullName,
@@ -109,8 +109,8 @@ namespace DatabaseLayer.Repositories
                 return new ResponseResult("Fail", ex.Message);
             }
         }
-            
-        
+
+
 
         public async Task<ResponseResult> SaveAdmin_Master(Admin_Master admin_Master)
         {
@@ -151,9 +151,9 @@ namespace DatabaseLayer.Repositories
                 if (result != null)
                 {
                     result.FullName = admin_Master.FullName;
-                    result.ContactNo=admin_Master.ContactNo;
+                    result.ContactNo = admin_Master.ContactNo;
                     result.Email = admin_Master.Email;
-                    result.Password = PasswordHelper.HashPassword(admin_Master.Password);
+
                     await _dbContext.SaveChangesAsync();
                     return new ResponseResult("OK", "Data Updated Successfully");
                 }
@@ -183,9 +183,38 @@ namespace DatabaseLayer.Repositories
                 admin.Email
             });
         }
+        public async Task<ResponseResult> ChangePassword(ChangePasswordDTO model)
+        {
+            try
+            {
+                var admin = await _dbContext.tbl_Admin_Master.FindAsync(model.Id);
+
+                if (admin == null)
+                    return new ResponseResult("Fail", "Admin not found");
+
+                if (model.NewPassword != model.ConfirmPassword)
+                    return new ResponseResult("Fail", "New password and confirm password do not match");
+
+                // Compare plain old password
+                if (admin.Password != model.OldPassword)
+                    return new ResponseResult("Fail", "Old password is incorrect");
+
+                // Store plain new password
+                admin.Password = model.NewPassword;
+
+                await _dbContext.SaveChangesAsync();
+
+                return new ResponseResult("OK", "Password changed successfully");
+            }
+            catch (Exception ex)
+            {
+                return new ResponseResult("Fail", ex.Message);
+            }
+        }
+
     }
 }
-
+    
 
 
 

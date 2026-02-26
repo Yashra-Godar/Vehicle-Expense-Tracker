@@ -19,6 +19,38 @@ namespace DatabaseLayer.Repositories
             _dbContext= dbContext;
         }
 
+        public async Task<ResponseResult> ChangeStaffPassword(ChangePasswordDTO model)
+        {
+            
+        {
+            try
+            {
+                var admin = await _dbContext.tbl_Staff_Master.FindAsync(model.Id);
+
+                if (admin == null)
+                    return new ResponseResult("Fail", "Admin not found");
+
+                if (model.NewPassword != model.ConfirmPassword)
+                    return new ResponseResult("Fail", "New password and confirm password do not match");
+
+                // Compare plain old password
+                if (admin.Password != model.OldPassword)
+                    return new ResponseResult("Fail", "Old password is incorrect");
+
+                // Store plain new password
+                admin.Password = model.NewPassword;
+
+                await _dbContext.SaveChangesAsync();
+
+                return new ResponseResult("OK", "Password changed successfully");
+            }
+            catch (Exception ex)
+            {
+                return new ResponseResult("Fail", ex.Message);
+            }
+        }
+        }
+
         public async  Task<ResponseResult> CreateStaff_Master(Staff_Master staff_master)
         {
             try

@@ -182,15 +182,32 @@ namespace Vehicle_Expense_Tracker.Controllers
             }
         }
 
+        [HttpPost("ChangePassword")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDTO model)
+        {
+            try
+            {
+                var result = await _Master.ChangeStaffPassword(model);
 
+                if (result.status == "OK")
+                    return Ok(result);
+
+                return BadRequest(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ResponseResult("Internal Server Error", ex.Message));
+            }
+        }
     }
+
+
+}
 
     public class StaffLoginDTO
     {
         public string Email { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
     }
-}
-
 
     

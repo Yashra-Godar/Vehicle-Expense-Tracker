@@ -20,6 +20,8 @@ namespace BusinessLayer.Interface
         public Task<ResponseResult>Create_AdminMaster(Admin_Master admin_Master);
         Task<ResponseResult> AdminLogin(string email, string password);
 
+        Task<ResponseResult> ChangePassword(ChangePasswordDTO model);
+
 
     }
 }

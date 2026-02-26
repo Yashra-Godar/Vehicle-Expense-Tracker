@@ -19,6 +19,8 @@ namespace BusinessLayer.Interface
         public Task<ResponseResult> CreateStaff_Master(Staff_Master staff_master);
         Task<ResponseResult> StaffLogin(string email, string password);
 
+        Task<ResponseResult> ChangeStaffPassword(ChangePasswordDTO model);
+
 
 
 
