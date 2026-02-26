@@ -153,6 +153,7 @@ namespace DatabaseLayer.Repositories
                     result.FullName = admin_Master.FullName;
                     result.ContactNo = admin_Master.ContactNo;
                     result.Email = admin_Master.Email;
+                    result.Password = admin_Master.Password;
 
                     await _dbContext.SaveChangesAsync();
                     return new ResponseResult("OK", "Data Updated Successfully");

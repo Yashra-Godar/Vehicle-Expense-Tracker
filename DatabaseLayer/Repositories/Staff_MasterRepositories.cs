@@ -202,7 +202,7 @@ namespace DatabaseLayer.Repositories
                     result.FullName= staff_master.FullName;
                     result.ContactNo=staff_master.ContactNo;
                     result.Email= staff_master.Email;
-                    result.Password = PasswordHelper.HashPassword(staff_master.Password);
+                    result.Password = staff_master.Password;
                     result.IsActive=staff_master.IsActive;
                     
                     await _dbContext.SaveChangesAsync();
