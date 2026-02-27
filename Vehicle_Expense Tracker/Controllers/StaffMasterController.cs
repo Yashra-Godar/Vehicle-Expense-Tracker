@@ -21,25 +21,37 @@ namespace Vehicle_Expense_Tracker.Controllers
             _Master = Master;
             _emailService = emailService;
         }
-        
+
 
 
         [HttpPost("Save")]
-        public async Task<IActionResult> SaveStaff_Master(Staff_Master staff_Master)
+        public async Task<IActionResult> SaveStaff_Master([FromBody] Staff_Master staff_Master)
         {
             try
             {
-                var result = await _Master.SaveStaff_Master(staff_Master);
-                if (result != null)
-                {
-                    return Ok(result);
-                }
-                else
-                {
-                    return BadRequest(result);
-                }
-            }
+                // ✅ Generate automatic password
+                string plainPassword = PasswordHelper.GeneratePassword();
 
+                // ✅ Hash password before saving
+                staff_Master.Password = PasswordHelper.HashPassword(plainPassword);
+
+                // ✅ Save to database
+                var result = await _Master.SaveStaff_Master(staff_Master);
+
+                if (result.status == "OK")
+                {
+                    // ✅ Send credentials via email
+                    _emailService.SendCredentials(
+                        staff_Master.Email,
+                        staff_Master.FullName,
+                        plainPassword
+                    );
+
+                    return Ok(new ResponseResult("OK", "Staff created and credentials emailed."));
+                }
+
+                return BadRequest(result);
+            }
             catch (Exception ex)
             {
                 return StatusCode(500, new ResponseResult("Internal Server Error", ex.Message));
@@ -139,27 +151,7 @@ namespace Vehicle_Expense_Tracker.Controllers
             }
         }
 
-        [HttpPost("Create")]
-
-        public async Task <IActionResult> CreateStaff([FromBody] Staff_Master staff_Master)
-        {
-            string plainPassword = PasswordHelper.GeneratePassword();
-
-            
-            staff_Master.Password = PasswordHelper.HashPassword(plainPassword);
-            staff_Master.Created_At = DateTime.Now;
-
-            await _Master.CreateStaff_Master(staff_Master);
-
-
-            
-            _emailService.SendCredentials(staff_Master.Email, staff_Master.FullName, plainPassword);
-
-
-
-            return Ok(new { message = "Staff created and credentials emailed." });
-
-        }
+        
         [HttpPost("Login")]
         public async Task<IActionResult> StaffLogin([FromBody] StaffLoginDTO model)
         {

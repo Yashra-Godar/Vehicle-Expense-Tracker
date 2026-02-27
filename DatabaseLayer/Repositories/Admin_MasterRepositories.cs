@@ -23,7 +23,7 @@ namespace DatabaseLayer.Repositories
             {
                 _dbContext.tbl_Admin_Master.Add(admin_Master);
                 await _dbContext.SaveChangesAsync();
-                return new ResponseResult("OK", "Admin account created Successfully and login credentials send to email");
+                return new ResponseResult("OK", "Data Inserted Successfully");
 
             }
             catch (Exception ex)

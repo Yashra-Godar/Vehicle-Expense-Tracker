@@ -21,27 +21,39 @@ namespace Vehicle_Expense_Tracker.Controllers
         }
 
         [HttpPost("Save")]
-
-        public async Task<IActionResult> SaveAdmin_Master(Admin_Master admin_Master)
+        public async Task<IActionResult> SaveAdmin_Master([FromBody] Admin_Master admin_Master)
         {
             try
             {
-                var result = await _Master.SaveAdmin_Master(admin_Master);
-                if (result != null)
-                {
-                    return Ok(result);
-                }
-                else
-                {
-                    return BadRequest(result);
-                }
-            }
+                // ✅ Generate automatic password
+                string plainPassword = PasswordHelper.GeneratePassword();
 
+                // ✅ Hash password before saving
+                admin_Master.Password = PasswordHelper.HashPassword(plainPassword);
+
+                // ✅ Save to database
+                var result = await _Master.SaveAdmin_Master(admin_Master);
+
+                if (result.status == "OK")
+                {
+                    // ✅ Send credentials via email
+                    _adminEmail.SendCredentials(
+                        admin_Master.Email,
+                        admin_Master.FullName,
+                        plainPassword
+                    );
+
+                    return Ok(new ResponseResult("OK", "Admin created and credentials emailed."));
+                }
+
+                return BadRequest(result);
+            }
             catch (Exception ex)
             {
                 return StatusCode(500, new ResponseResult("Internal Server Error", ex.Message));
             }
         }
+        
 
         [HttpPut("Update/{Id}")]
 
@@ -137,27 +149,7 @@ namespace Vehicle_Expense_Tracker.Controllers
             }
         }
 
-        [HttpPost("Create")]
-
-        public async Task<IActionResult> CreateAdmin_Master([FromBody] Admin_Master admin_Master)
-        {
-            string plainPassword = PasswordHelper.GeneratePassword();
-
-            admin_Master.Password = PasswordHelper.HashPassword(plainPassword);
-
-
-            await _Master.Create_AdminMaster(admin_Master);
-
-            // ✅ Use injected service
-
-            _adminEmail.SendCredentials(
-                admin_Master.Email,
-                admin_Master.FullName,
-                plainPassword
-            );
-
-            return Ok(new { message = "Admin created and credentials emailed." });
-        }
+        
 
         [HttpPost("Login")]
         public async Task<IActionResult> AdminLogin([FromBody] AdminLoginDTO model)

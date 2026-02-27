@@ -57,7 +57,7 @@ namespace DatabaseLayer.Repositories
             {
                 _dbContext.tbl_Staff_Master.Add(staff_master);
                 await _dbContext.SaveChangesAsync();
-                return new ResponseResult("OK", "Staff account created Successfully and login credentials send to email");
+                return new ResponseResult("OK", "Data Inserted Successfully");
             
         }
             catch (Exception ex)
