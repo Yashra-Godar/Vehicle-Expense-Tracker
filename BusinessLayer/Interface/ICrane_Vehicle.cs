@@ -17,6 +17,9 @@ namespace BusinessLayer.Interface
 
         public Task<ResponseResult> DetailCrane_Vehicle(int Id);
 
+        Task<VehicleSummaryDTO> GetVehicleSummaryAsync(int id);
+
+
 
 
 

@@ -120,6 +120,44 @@ namespace Vehicle_Expense_Tracker.Controllers
 
         }
 
+        [HttpGet("Summary/{id}")]
+        public async Task<IActionResult> GetVehicleSummary(int id)
+        {
+            try
+            {
+                if (id <= 0)
+                {
+                    return BadRequest(new
+                    {
+                        status = "ERROR",
+                        message = "Invalid Vehicle Id"
+                    });
+                }
+
+                var result = await _craneVehicle.GetVehicleSummaryAsync(id);
+
+                if (result == null)
+                {
+                    return NotFound(new
+                    {
+                        status = "ERROR",
+                        message = "Vehicle not found"
+                    });
+                }
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    status = "ERROR",
+                    message = ex.Message
+                });
+            }
+        }
+
+
     }
 
 }
