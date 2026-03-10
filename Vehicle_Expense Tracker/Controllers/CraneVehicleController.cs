@@ -157,7 +157,20 @@ namespace Vehicle_Expense_Tracker.Controllers
             }
         }
 
-
+        [HttpPost]
+        [Route("VehicleExpenseReport")]
+        public async Task<IActionResult> VehicleExpenseReport(DateTime fromDate, DateTime toDate, int id)
+        {
+            try
+            {
+                var result = await _craneVehicle.GetVehicleExpenseReport(fromDate, toDate, id);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ResponseResult("Fail", ex.Message));
+            }
+        }
     }
 
 }

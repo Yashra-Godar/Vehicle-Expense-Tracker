@@ -87,6 +87,64 @@ namespace DatabaseLayer.Repositories
             }
         }
 
+        public async Task<ResponseResult> GetVehicleExpenseReport(DateTime fromDate, DateTime toDate, int id)
+        {
+            
+                try
+                {
+                    var vehicles = _dbContext.tbl_CraneVehicle.AsQueryable();
+
+                    if (id > 0)
+                    {
+                        vehicles = vehicles.Where(v => v.Id == id);
+                    }
+
+                    var report = await vehicles
+                        .Select(v => new
+                        {
+                            VehicleId = v.Id,
+                            VehicleNumber = v.Vehicle_No,
+
+                            OilExpense = _dbContext.craneOilChangeLogs
+                                .Where(o => o.Crane_VehicleId == v.Id && o.Created_At >= fromDate && o.Created_At <= toDate)
+                                .Sum(o => (decimal?)o.Unit) ?? 0,
+
+                            FuelExpense = _dbContext.tbl_FuelExpenses
+                                .Where(f => f.Crane_VehicleId == v.Id && f.Fuel_Date >= fromDate && f.Fuel_Date <= toDate)
+                                .Sum(f => (decimal?)f.Fuel_Qty) ?? 0,
+
+                            ServiceExpense = _dbContext.tbl_ServiceMaster
+                                .Where(s => s.Crane_VehicleId == v.Id && s.Service_Date >= fromDate && s.Service_Date <= toDate)
+                                .Sum(s => (decimal?)s.Cost) ?? 0,
+
+                            OtherExpense = _dbContext.craneOtherExpenses
+                                .Where(o => o.Crane_VehicleId == v.Id && o.Expense_Date >= fromDate && o.Expense_Date <= toDate)
+                                .Sum(o => (decimal?)o.Amount) ?? 0
+                        })
+                        .Select(x => new
+                        {
+                            x.VehicleId,
+                            x.VehicleNumber,
+                            x.OilExpense,
+                            x.FuelExpense,
+                            x.ServiceExpense,
+                            x.OtherExpense,
+                            TotalExpense = x.OilExpense + x.FuelExpense + x.ServiceExpense + x.OtherExpense
+                        })
+                        .ToListAsync();
+
+                return new ResponseResult("OK", report); 
+
+            } 
+            catch (Exception ex)
+            {
+                throw new Exception("Error while fetching vehicle summary", ex);
+            }
+        }
+
+
+
+
         public async Task<VehicleSummaryDTO> GetVehicleSummaryAsync(int id)
         {
             try
