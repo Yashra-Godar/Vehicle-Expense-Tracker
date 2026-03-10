@@ -157,9 +157,9 @@ namespace Vehicle_Expense_Tracker.Controllers
             }
         }
 
-        [HttpGet("VehicleExpenseReport/{fromDate}/{toDate}/{id}")]
-     
-        public async Task<IActionResult> VehicleExpenseReport(DateTime fromDate, DateTime toDate, int id)
+        [HttpGet]
+        [Route("VehicleExpenseReport/{id}")]
+        public async Task<IActionResult> VehicleExpenseReport(int id, DateTime fromDate, DateTime toDate)
         {
             try
             {
@@ -172,5 +172,6 @@ namespace Vehicle_Expense_Tracker.Controllers
             }
         }
     }
-
 }
+
+    
