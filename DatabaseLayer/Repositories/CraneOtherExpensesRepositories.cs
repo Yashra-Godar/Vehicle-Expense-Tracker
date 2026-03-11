@@ -101,7 +101,16 @@ namespace DatabaseLayer.Repositories
                     .Select(o => new
                     {
                         o.Id,
-
+                        vehicle = new
+                        {
+                            o.Crane_VehicleId,
+                            o.Crane_Vehicle!.Vehicle_Name,
+                            o.Crane_Vehicle!.Vehicle_No,
+                            o.Crane_Vehicle!.Max_Lifting_Height,
+                            o.Crane_Vehicle!.Capacity_Tons,
+                            o.Crane_Vehicle!.Make_by,
+                            o.Crane_Vehicle!.Manufacture_Year
+                        },
                         Staff = new
                         {
                             o.Staff_MasterId,

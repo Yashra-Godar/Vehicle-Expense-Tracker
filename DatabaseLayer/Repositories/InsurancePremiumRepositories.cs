@@ -94,6 +94,43 @@ namespace DatabaseLayer.Repositories
             }
         }
 
+        public async Task<ResponseResult> Insurance_PremiumReport(DateTime fromDate, DateTime toDate)
+        {
+            try
+            {
+                if (fromDate > toDate)
+                {
+                    return new ResponseResult("Fail", "From date cannot be greater than To date");
+                }
+
+                var result = await _dbContext.tbl_InsurancePremium
+                    .Where(o => o.Payment_Date.Date >= fromDate.Date && o.Payment_Date.Date <= toDate.Date)
+                    .Select(o => new
+                    {
+                        o.Id,
+
+                        Staff = new
+                        {
+                            o.Staff_MasterId,
+                            o.Staff_Master!.FullName,
+                        },
+                        o.Paid_To,
+                        o.Crane_Insurance
+                        o.Remarks,
+                        o.Created_At
+                    })
+                    .ToListAsync();
+
+                return new ResponseResult("OK", result);
+            }
+            catch (Exception ex)
+            {
+                return new ResponseResult("Fail", ex.Message);
+            }
+        }
+
+        }
+
         public async Task<ResponseResult> ListInsurance_Premium()
         {
             try
