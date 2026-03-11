@@ -115,7 +115,7 @@ namespace DatabaseLayer.Repositories
                             o.Staff_Master!.FullName,
                         },
                         o.Paid_To,
-                        o.Crane_Insurance
+                        o.Crane_Insurance,
                         o.Remarks,
                         o.Created_At
                     })
@@ -129,7 +129,7 @@ namespace DatabaseLayer.Repositories
             }
         }
 
-        }
+        
 
         public async Task<ResponseResult> ListInsurance_Premium()
         {
