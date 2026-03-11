@@ -126,6 +126,28 @@ namespace Vehicle_Expense_Tracker.Controllers
 
             }
 
+        [HttpGet("Report")]
+        public async Task<IActionResult> CraneOilChange_Report([FromQuery] DateTime fromDate, [FromQuery] DateTime toDate)
+        {
+            try
+            {
+                var result = await _changeLog.CraneOilChange_Report(fromDate, toDate);
+
+                if (result.status == "OK")
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ResponseResult("Internal Server Error", ex.Message));
+            }
         }
+
+    }
     }
 
