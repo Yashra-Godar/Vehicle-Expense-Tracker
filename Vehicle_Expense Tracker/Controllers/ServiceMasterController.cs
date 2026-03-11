@@ -15,11 +15,11 @@ namespace Vehicle_Expense_Tracker.Controllers
             _Master = Master;
         }
         [HttpPost("Save")]
-        public async Task<IActionResult>SaveService(Service_Master service)
+        public async Task<IActionResult> SaveService(Service_Master service)
         {
             try
             {
-                var result= await _Master.SaveService(service);
+                var result = await _Master.SaveService(service);
                 if (result != null)
                 {
                     return Ok(result);
@@ -58,12 +58,12 @@ namespace Vehicle_Expense_Tracker.Controllers
         }
 
         [HttpDelete("Delete/{Id}")]
-        public async Task<IActionResult>DeleteService(int Id)
+        public async Task<IActionResult> DeleteService(int Id)
         {
             try
             {
-                var result=await _Master.DeleteService(Id);
-                if(result.status == "OK")
+                var result = await _Master.DeleteService(Id);
+                if (result.status == "OK")
                 {
                     return Ok(result);
                 }
@@ -86,14 +86,14 @@ namespace Vehicle_Expense_Tracker.Controllers
             try
             {
                 var result = await _Master.ListService();
-                if(result.status == "OK")
-                {        
-                     return Ok(result);
-                    }
-                    else
-                    {
-                        return BadRequest(result);
-                    }
+                if (result.status == "OK")
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest(result);
+                }
 
             }
             catch (Exception ex)
@@ -123,6 +123,28 @@ namespace Vehicle_Expense_Tracker.Controllers
                 return StatusCode(500, new ResponseResult("Internal Server Error", ex.Message));
             }
         }
-    }
+
+        [HttpGet("Report")]
+        public async Task<IActionResult> Service_Report([FromQuery] DateTime fromDate, [FromQuery] DateTime toDate)
+        {
+            try
+            {
+                var result = await _Master.Service_Report(fromDate, toDate);
+
+                if (result.status == "OK")
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ResponseResult("Internal Server Error", ex.Message));
+            }
+        }
     }
 
+}
