@@ -89,6 +89,51 @@ namespace DatabaseLayer.Repositories
             }
         }
 
+        public async Task<ResponseResult> Fuel_ExpenseReport(DateTime fromDate, DateTime toDate)
+        {
+            try
+            {
+                if (fromDate > toDate)
+                {
+                    return new ResponseResult("Fail", "From date cannot be greater than To date");
+                }
+
+                var result = await _dbContext.tbl_FuelExpenses
+                    .Where(o => o.Fuel_Date.Date >= fromDate.Date && o.Fuel_Date.Date <= toDate.Date)
+                    .Select(o => new
+                    {
+                        o.Id,
+                       
+                        Staff = new
+                        {
+                            o.Staff_MasterId,
+                            o.Staff_Master!.FullName,
+                        },
+                        o.Fuel_Date,
+                        o.Fuel_Qty,
+                        o.Fuel_Source,
+                        o.Fuel_Station,
+                        o.Payment_Method,
+                        o.Odometer_Reading,
+                        o.Rate,
+                        o.Receipt_No,
+                        o.Remarks,
+                        o.Created_At
+                    })
+                    .ToListAsync();
+
+                return new ResponseResult("OK", result);
+            }
+            catch (Exception ex)
+            {
+                return new ResponseResult("Fail", ex.Message);
+            }
+        }
+
+    
+
+        
+
         public async Task<ResponseResult> ListFuel_Expenses()
         {
             try
