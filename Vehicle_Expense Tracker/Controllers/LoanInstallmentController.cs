@@ -110,6 +110,28 @@ namespace Vehicle_Expense_Tracker.Controllers
                 return StatusCode(500, new ResponseResult("Internal Server Error", ex.Message));
             }
         }
+
+        [HttpGet("Report")]
+        public async Task<IActionResult> LoanInstallmentReport([FromQuery] DateTime fromDate, [FromQuery] DateTime toDate)
+        {
+            try
+            {
+                var result = await _Installment.LoanInstallmentReport(fromDate, toDate);
+
+                if (result.status == "OK")
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ResponseResult("Internal Server Error", ex.Message));
+            }
+        }
     }
 }
     

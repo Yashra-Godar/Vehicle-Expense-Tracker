@@ -59,6 +59,7 @@ namespace DatabaseLayer.Repositories
                         o.Staff_MasterId,
                         o.Staff_Master!.FullName,
                     },
+                    o.Installment_Date,
                     
                     o.Amount_Paid,
                     o.Payment_Method,
@@ -148,7 +149,52 @@ namespace DatabaseLayer.Repositories
             {
                 return new ResponseResult("Fail", ex.Message);
             }
-
         }
+
+        public async Task<ResponseResult> LoanInstallmentReport(DateTime fromDate, DateTime toDate)
+        {
+            try
+            {
+                if (fromDate > toDate)
+                {
+                    return new ResponseResult("Fail", "From date cannot be greater than To date");
+                }
+
+                var result = await _dbContext.tbl_LoanInstallment
+                    .Where(o => o.Installment_Date.Date >= fromDate.Date &&  o.Installment_Date.Date <= toDate.Date)
+                    .Select(o => new
+                    {
+                        o.Id,
+                        VehicleLoan = new
+                        {
+                            o.Vehicle_LoanId,
+                            o.Vehicle_Loan!.Loan_Provider,
+                            o.Vehicle_Loan!.Loan_Amount,
+                            o.Vehicle_Loan!.Monthly_Installment,
+                        },
+                        Staff = new
+                        {
+                            o.Staff_MasterId,
+                            o.Staff_Master!.FullName,
+                        },
+                        o.Installment_Date,
+                        o.Amount_Paid,
+                        o.Payment_Method,
+                        o.Receipt_No,
+                        o.Paid_On,
+                        o.Status,
+                        o.Note,
+                        o.Created_At
+                    })
+                    .ToListAsync();
+
+                return new ResponseResult("OK", result);
+            }
+            catch (Exception ex)
+            {
+                return new ResponseResult("Fail", ex.Message);
+            }
+        }
+
     }
 }
