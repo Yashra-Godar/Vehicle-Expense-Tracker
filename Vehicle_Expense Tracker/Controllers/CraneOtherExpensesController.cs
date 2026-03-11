@@ -129,5 +129,27 @@ namespace Vehicle_Expense_Tracker.Controllers
 
 
         }
+
+        [HttpGet("Report")]
+        public async Task<IActionResult> CraneOtherExpenses_Report([FromQuery] DateTime fromDate, [FromQuery] DateTime toDate)
+        {
+            try
+            {
+                var result = await _otherExpenses.CraneOtherExpenses_Report(fromDate, toDate);
+
+                if (result.status == "OK")
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ResponseResult("Internal Server Error", ex.Message));
+            }
+        }
     }
 }

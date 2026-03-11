@@ -87,6 +87,47 @@ namespace DatabaseLayer.Repositories
             }
         }
 
+        public async Task<ResponseResult> CraneOtherExpenses_Report(DateTime fromDate, DateTime toDate)
+        {
+            try
+            {
+                if (fromDate > toDate)
+                {
+                    return new ResponseResult("Fail", "From date cannot be greater than To date");
+                }
+
+                var result = await _dbContext.craneOtherExpenses
+                    .Where(o => o.Expense_Date.Date >= fromDate.Date && o.Expense_Date.Date <= toDate.Date)
+                    .Select(o => new
+                    {
+                        o.Id,
+
+                        Staff = new
+                        {
+                            o.Staff_MasterId,
+                            o.Staff_Master!.FullName,
+                        },
+                        o.Expense_Type,
+                        o.Amount,
+                        o.Expense_Date,
+                        o.Paid_To,
+                        o.Reference_No,
+                        o.Description,
+                        o.Payment_Mode,
+                        o.Created_At
+                    })
+                    .ToListAsync();
+
+                return new ResponseResult("OK", result);
+            }
+            catch (Exception ex)
+            {
+                return new ResponseResult("Fail", ex.Message);
+            }
+        }
+
+        
+
         public async Task<ResponseResult> ListCraneOtherExpenses()
         {
             try

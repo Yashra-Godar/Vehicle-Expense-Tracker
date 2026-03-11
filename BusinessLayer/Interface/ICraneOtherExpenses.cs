@@ -16,5 +16,7 @@ namespace BusinessLayer.Interface
         public Task<ResponseResult> DeleteCraneOtherExpenses(int Id);
 
         public Task<ResponseResult> DetailCraneOtherExpenses(int Id);
+
+        public Task<ResponseResult> CraneOtherExpenses_Report(DateTime fromDate, DateTime toDate);
     }
 }
