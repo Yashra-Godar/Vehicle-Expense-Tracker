@@ -155,5 +155,28 @@ namespace Vehicle_Expense_Tracker.Controllers
                 return StatusCode(500, new ResponseResult("Internal Server Error", ex.Message));
             }
         }
+
+        [HttpGet("PremiumDetail/{Id}")]
+        public async Task<IActionResult> GetInsurance_Premium(int Id,Insurance_Premium insurance_Premium)
+        {
+            try
+            {
+                var result = await _Premium.GetInsurance_Premium(Id, insurance_Premium);
+
+                if (result.status == "OK")
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return NotFound(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ResponseResult("Internal Server Error", ex.Message));
+            }
+
+        }
     }
 }

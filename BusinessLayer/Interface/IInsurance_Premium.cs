@@ -19,6 +19,7 @@ namespace BusinessLayer.Interface
 
         public Task<ResponseResult> Insurance_PremiumReport(DateTime fromDate, DateTime toDate);
 
+        public Task<ResponseResult> GetInsurance_Premium(int Id, Insurance_Premium insurance_premium);
 
 
 
