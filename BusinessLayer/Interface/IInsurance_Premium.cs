@@ -15,11 +15,11 @@ namespace BusinessLayer.Interface
 
         public Task<ResponseResult> ListInsurance_Premium();
 
-        public Task<ResponseResult> DetailInsurance_Premium(int Id);
+        public Task<ResponseResult> Detail(int Id);
 
         public Task<ResponseResult> Insurance_PremiumReport(DateTime fromDate, DateTime toDate);
 
-        public Task<ResponseResult> GetInsurance_Premium(int Id, Insurance_Premium insurance_premium);
+        public Task<ResponseResult>DetailInsurance_Premium(int Id, Insurance_Premium insurance_premium);
 
 
 

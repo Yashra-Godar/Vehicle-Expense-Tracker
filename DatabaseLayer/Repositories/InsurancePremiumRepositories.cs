@@ -38,7 +38,58 @@ namespace DatabaseLayer.Repositories
             }
         }
 
-        public async Task<ResponseResult> DetailInsurance_Premium(int Id)
+        public async Task<ResponseResult> Detail(int Id)
+        {
+            try
+            {
+                var result = await _dbContext.tbl_InsurancePremium.Where(o => o.Id == Id).Select(o => new
+                {
+                    o.Id,
+                    vehicle = new
+                    {
+                        o.Crane_VehicleId,
+                        o.Crane_Vehicle!.Vehicle_Name,
+                        o.Crane_Vehicle!.Vehicle_No,
+                        o.Crane_Vehicle!.Max_Lifting_Height,
+                        o.Crane_Vehicle!.Capacity_Tons,
+                        o.Crane_Vehicle!.Make_by,
+                        o.Crane_Vehicle!.Manufacture_Year
+                    },
+                    staff = new
+                    {
+                        o.Staff_MasterId,
+                        o.Staff_Master!.FullName,
+                    },
+                    o.Premium_Month,
+                    o.Payment_Date,
+                    o.Amount_Date,
+                    o.Payment_Mode,
+                    o.Paid_To,
+                    o.Remarks,
+                    o.Created_At
+                }).FirstOrDefaultAsync();
+                if (result != null)
+                {
+
+                    return new ResponseResult("OK", result);
+
+                }
+                else
+                {
+                    return new ResponseResult("Fail", "Not Found");
+
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ResponseResult("Fail", ex.Message);
+            }
+        }
+            
+
+        
+
+        public async Task<ResponseResult> DetailInsurance_Premium(int Id, Insurance_Premium insurance_Premium)
         {
             try
             {
@@ -94,6 +145,8 @@ namespace DatabaseLayer.Repositories
             }
         }
 
+        
+
         public async Task<ResponseResult> Insurance_PremiumReport(DateTime fromDate, DateTime toDate)
         {
             try
@@ -131,7 +184,7 @@ namespace DatabaseLayer.Repositories
                             o.Staff_Master!.FullName,
                         },
                         o.Paid_To,
-                        o.Crane_Insurance
+                        o.Crane_Insurance,
                         o.Remarks,
                         o.Created_At
                     })

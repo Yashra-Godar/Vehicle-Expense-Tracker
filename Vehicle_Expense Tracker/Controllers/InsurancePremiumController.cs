@@ -108,11 +108,11 @@ namespace Vehicle_Expense_Tracker.Controllers
         }
 
         [HttpGet("Detail/{Id}")]
-        public async Task<IActionResult> DetailInsurance_Premium(int Id)
+        public async Task<IActionResult> Detail(int Id)
         {
             try
             {
-                var result = await _Premium.DetailInsurance_Premium(Id);
+                var result = await _Premium.Detail(Id);
                 if (result.status == "OK")
                 {
                     return Ok(result);
@@ -128,6 +128,7 @@ namespace Vehicle_Expense_Tracker.Controllers
                 return StatusCode(500, new ResponseResult("Internal Server Error", ex.Message));
 
             }
+        
 
 
 
@@ -157,11 +158,11 @@ namespace Vehicle_Expense_Tracker.Controllers
         }
 
         [HttpGet("PremiumDetail/{Id}")]
-        public async Task<IActionResult> GetInsurance_Premium(int Id,Insurance_Premium insurance_Premium)
+        public async Task<IActionResult> DetailInsurance_Premium(int Id,Insurance_Premium insurance_Premium)
         {
             try
             {
-                var result = await _Premium.GetInsurance_Premium(Id, insurance_Premium);
+                var result = await _Premium.DetailInsurance_Premium(Id, insurance_Premium);
 
                 if (result.status == "OK")
                 {
