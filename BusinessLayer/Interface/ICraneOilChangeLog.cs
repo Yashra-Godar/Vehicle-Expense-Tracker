@@ -17,6 +17,8 @@ namespace BusinessLayer.Interface
 
         public Task<ResponseResult> DetailCraneOilChange(int Id);
 
+        public Task<ResponseResult> CraneOilChange_Report(DateTime fromDate, DateTime toDate);
+
 
 
     }

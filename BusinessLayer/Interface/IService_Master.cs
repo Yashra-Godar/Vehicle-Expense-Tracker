@@ -17,6 +17,8 @@ namespace BusinessLayer.Interface
 
         public Task<ResponseResult> DetailService(int Id);
 
+        public Task<ResponseResult> Service_Report(DateTime fromDate, DateTime toDate);
+
 
     }
 }

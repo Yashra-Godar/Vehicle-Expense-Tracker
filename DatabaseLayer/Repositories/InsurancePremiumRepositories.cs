@@ -108,14 +108,30 @@ namespace DatabaseLayer.Repositories
                     .Select(o => new
                     {
                         o.Id,
-
+                        vehicle = new
+                        {
+                            o.Crane_VehicleId,
+                            o.Crane_Vehicle!.Vehicle_Name,
+                            o.Crane_Vehicle!.Vehicle_No,
+                            o.Crane_Vehicle!.Max_Lifting_Height,
+                            o.Crane_Vehicle!.Capacity_Tons,
+                            o.Crane_Vehicle!.Make_by,
+                            o.Crane_Vehicle!.Manufacture_Year
+                        },
+                        CraneInsurance = new
+                        {
+                            o.Crane_Insurance!.Insurance_Company,
+                            o.Crane_Insurance!.Policy_No,
+                            o.Crane_Insurance!.Policy_Type,
+                            o.Crane_Insurance!.Created_At,
+                        },
                         Staff = new
                         {
                             o.Staff_MasterId,
                             o.Staff_Master!.FullName,
                         },
                         o.Paid_To,
-                        o.Crane_Insurance,
+                        o.Crane_Insurance
                         o.Remarks,
                         o.Created_At
                     })

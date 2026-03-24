@@ -157,18 +157,26 @@ namespace Vehicle_Expense_Tracker.Controllers
             }
         }
 
-       
-        [HttpPost("VehicleExpenseReport/{id}")]
-        public async Task<IActionResult> VehicleExpenseReport(int id, DateTime fromDate, DateTime toDate)
+
+        [HttpGet("Report")]
+        public async Task<IActionResult> Fuel_ExpenseReport([FromQuery] DateTime fromDate, [FromQuery] DateTime toDate)
         {
             try
             {
-                var result = await _craneVehicle.GetVehicleExpenseReport(fromDate, toDate, id);
-                return Ok(result);
+                var result = await _craneVehicle.vehicle_Report(fromDate, toDate);
+
+                if (result.status == "OK")
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest(result);
+                }
             }
             catch (Exception ex)
             {
-                return BadRequest(new ResponseResult("Fail", ex.Message));
+                return StatusCode(500, new ResponseResult("Internal Server Error", ex.Message));
             }
         }
     }

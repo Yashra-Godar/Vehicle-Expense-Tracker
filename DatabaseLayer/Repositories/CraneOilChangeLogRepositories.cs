@@ -17,6 +17,59 @@ namespace DatabaseLayer.Repositories
         {
             _dbContext = dbContext;
         }
+
+        public async Task<ResponseResult> CraneOilChange_Report(DateTime fromDate, DateTime toDate)
+        {
+            try
+            {
+                if (fromDate > toDate)
+                {
+                    return new ResponseResult("Fail", "From date cannot be greater than To date");
+                }
+
+                var result = await _dbContext.craneOilChangeLogs
+                    .Where(o => o.Created_At.Date >= fromDate.Date && o.Created_At.Date <= toDate.Date)
+                    .Select(o => new
+                    {
+                        o.Id,
+                        vehicle = new
+                        {
+                            o.Crane_VehicleId,
+                            o.Crane_Vehicle!.Vehicle_Name,
+                            o.Crane_Vehicle!.Vehicle_No,
+                            o.Crane_Vehicle!.Max_Lifting_Height,
+                            o.Crane_Vehicle!.Capacity_Tons,
+                            o.Crane_Vehicle!.Make_by,
+                            o.Crane_Vehicle!.Manufacture_Year
+                        },
+
+                        Staff = new
+                        {
+                            o.Staff_MasterId,
+                            o.Staff_Master!.FullName,
+                        },
+                        o.Oil_Type,
+                        o.Oil_Brand,
+                        o.Oil_Qty,
+                        o.Changed_By,
+                        o.Unit,
+                        o.Meter_Reading,
+                        o.Remarks,
+                        o.Created_At
+                    })
+                    .ToListAsync();
+
+                return new ResponseResult("OK", result);
+            }
+            catch (Exception ex)
+            {
+                return new ResponseResult("Fail", ex.Message);
+            }
+        }
+
+    
+        
+
         public async Task<ResponseResult> DeleteCraneOilChange(int Id)
         {
             try

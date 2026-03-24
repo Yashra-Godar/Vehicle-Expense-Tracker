@@ -87,60 +87,7 @@ namespace DatabaseLayer.Repositories
             }
         }
 
-        public async Task<ResponseResult> GetVehicleExpenseReport(DateTime fromDate, DateTime toDate, int id)
-        {
-            
-                try
-                {
-                    var vehicles = _dbContext.tbl_CraneVehicle.AsQueryable();
-
-                    if (id > 0)
-                    {
-                        vehicles = vehicles.Where(v => v.Id == id);
-                    }
-
-                    var report = await vehicles
-                        .Select(v => new
-                        {
-                            VehicleId = v.Id,
-                            VehicleNumber = v.Vehicle_No,
-
-                            OilExpense = _dbContext.craneOilChangeLogs
-                                .Where(o => o.Crane_VehicleId == v.Id && o.Created_At >= fromDate && o.Created_At <= toDate)
-                                .Sum(o => (decimal?)o.Unit) ?? 0,
-
-                            FuelExpense = _dbContext.tbl_FuelExpenses
-                                .Where(f => f.Crane_VehicleId == v.Id && f.Fuel_Date >= fromDate && f.Fuel_Date <= toDate)
-                                .Sum(f => (decimal?)f.Fuel_Qty) ?? 0,
-
-                            ServiceExpense = _dbContext.tbl_ServiceMaster
-                                .Where(s => s.Crane_VehicleId == v.Id && s.Service_Date >= fromDate && s.Service_Date <= toDate)
-                                .Sum(s => (decimal?)s.Cost) ?? 0,
-
-                            OtherExpense = _dbContext.craneOtherExpenses
-                                .Where(o => o.Crane_VehicleId == v.Id && o.Expense_Date >= fromDate && o.Expense_Date <= toDate)
-                                .Sum(o => (decimal?)o.Amount) ?? 0
-                        })
-                        .Select(x => new
-                        {
-                            x.VehicleId,
-                            x.VehicleNumber,
-                            x.OilExpense,
-                            x.FuelExpense,
-                            x.ServiceExpense,
-                            x.OtherExpense,
-                            TotalExpense = x.OilExpense + x.FuelExpense + x.ServiceExpense + x.OtherExpense
-                        })
-                        .ToListAsync();
-
-                return new ResponseResult("OK", report); 
-
-            } 
-            catch (Exception ex)
-            {
-                throw new Exception("Error while fetching vehicle summary", ex);
-            }
-        }
+        
 
 
 
@@ -354,6 +301,53 @@ namespace DatabaseLayer.Repositories
                 {
                     return new ResponseResult("Fail", "Data not Found");
                 }
+            }
+            catch (Exception ex)
+            {
+                return new ResponseResult("Fail", ex.Message);
+            }
+        }
+
+        public async Task<ResponseResult> vehicle_Report(DateTime fromDate, DateTime toDate)
+        {
+            try
+            {
+                if (fromDate > toDate)
+                {
+                    return new ResponseResult("Fail", "From date cannot be greater than To date");
+                }
+
+                var result = await _dbContext.tbl_CraneVehicle
+                    .Where(o => o.Import_Date.Date >= fromDate.Date && o.Import_Date.Date <= toDate.Date)
+                    .Select(o => new
+                    {
+                        o.Id,
+                        vehicleType = new
+                        {
+                            o.Vehicle_TypeId,
+                            o.Vehicle_Type!.TypeName,
+                        },
+
+                        Staff = new
+                        {
+                            o.Staff_MasterId,
+                            o.Staff_Master!.FullName,
+                        },
+                       o.Vehicle_No,
+                       o.Vehicle_Name,
+                       o.Model, 
+                       o.Manufacture_Year,
+                       o.Max_Lifting_Height,
+                       o.Capacity_Tons,
+                       o.Make_by,
+                       o.Import_From,
+                       o.Import_Date,
+                       o.Purchase_Type,
+                       o.Note
+                    })
+                    .ToListAsync();
+
+                return new ResponseResult("OK", result);
             }
             catch (Exception ex)
             {

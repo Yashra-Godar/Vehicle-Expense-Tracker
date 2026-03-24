@@ -19,7 +19,9 @@ namespace BusinessLayer.Interface
 
         Task<VehicleSummaryDTO> GetVehicleSummaryAsync(int id);
 
-        Task<ResponseResult> GetVehicleExpenseReport(DateTime fromDate, DateTime toDate, int id);
+        public Task<ResponseResult> vehicle_Report(DateTime fromDate, DateTime toDate);
+
+       
 
 
 

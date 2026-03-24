@@ -210,6 +210,76 @@ namespace DatabaseLayer.Repositories
 
         }
 
+        public async Task<ResponseResult> Service_Report(DateTime fromDate, DateTime toDate)
+        {
+            try
+            {
+                if (fromDate > toDate)
+                {
+                    return new ResponseResult("Fail", "From date cannot be greater than To date");
+                }
+
+                var result = await _dbContext.tbl_ServiceMaster
+                    .Where(o => o.Service_Date.Date >= fromDate.Date && o.Service_Date.Date <= toDate.Date)
+                    .Select(o => new
+                    {
+                        o.Id,
+                        vehicle = new
+                        {
+                            o.Crane_VehicleId,
+                            o.Crane_Vehicle!.Vehicle_Name,
+                            o.Crane_Vehicle!.Vehicle_No,
+                            o.Crane_Vehicle!.Max_Lifting_Height,
+                            o.Crane_Vehicle!.Capacity_Tons,
+                            o.Crane_Vehicle!.Make_by,
+                            o.Crane_Vehicle!.Manufacture_Year
+                        },
+
+                        Staff = new
+                        {
+                            o.Staff_MasterId,
+                            o.Staff_Master!.FullName,
+                        },
+                        serviceParts = o.service_Parts.Select(o => new
+                        {
+                            o.Id,
+                            o.Parts_Name,
+                            o.Qty,
+                            o.Unit_Cost,
+                            o.Total_Cost,
+                            o.Created_At
+                        }),
+
+
+
+                        serviceCentre = new
+                        {
+
+                            o.ServiceCentreId,
+                            o.ServiceCentre!.Name,
+                            o.ServiceCentre!.Address,
+                            o.ServiceCentre!.ContactNo,
+                            o.ServiceCentre!.Email,
+                            o.ServiceCentre!.CreatedAt,
+
+                        },
+                        o.Service_Date,
+                        o.Service_Type,
+                        o.Performed_By,
+                        o.Remark,
+                        o.Cost,
+                        o.Created_At,
+                    })
+                    .ToListAsync();
+                return new ResponseResult("OK", result);
+            }
+        
+            catch (Exception ex)
+            {
+                return new ResponseResult("Fail", ex.Message);
+            }
+        }
+
         public async Task<ResponseResult> UpdateService(int Id, Service_Master service)
         {
             try
