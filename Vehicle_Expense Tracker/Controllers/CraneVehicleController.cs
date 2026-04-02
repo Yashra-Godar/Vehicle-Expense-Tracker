@@ -159,7 +159,7 @@ namespace Vehicle_Expense_Tracker.Controllers
 
 
         [HttpGet("Report")]
-        public async Task<IActionResult> Fuel_ExpenseReport([FromQuery] DateTime fromDate, [FromQuery] DateTime toDate)
+        public async Task<IActionResult> vehicle_Report([FromQuery] DateTime fromDate, [FromQuery] DateTime toDate)
         {
             try
             {
