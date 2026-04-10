@@ -171,6 +171,8 @@ namespace DatabaseLayer.Repositories
                             o.Vehicle_Loan!.Loan_Provider,
                             o.Vehicle_Loan!.Loan_Amount,
                             o.Vehicle_Loan!.Monthly_Installment,
+                            o.Vehicle_Loan!.Crane_Vehicle!.Vehicle_Name,
+                            o.Vehicle_Loan!.Crane_Vehicle!.Vehicle_No
                         },
                         Staff = new
                         {
@@ -185,8 +187,7 @@ namespace DatabaseLayer.Repositories
                         o.Status,
                         o.Note,
                         o.Created_At
-                    })
-                    .ToListAsync();
+                    }).ToListAsync();
 
                 return new ResponseResult("OK", result);
             }
