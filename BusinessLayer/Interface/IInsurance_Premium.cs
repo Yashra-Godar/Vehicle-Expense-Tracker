@@ -21,6 +21,8 @@ namespace BusinessLayer.Interface
 
         public Task<ResponseResult>DetailInsurance_Premium(int Id, Insurance_Premium insurance_premium);
 
+        public Task<ResponseResult> PremiumReminderList();
+
 
 
 

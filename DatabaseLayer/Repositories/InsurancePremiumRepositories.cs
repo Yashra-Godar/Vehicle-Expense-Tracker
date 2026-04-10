@@ -246,6 +246,53 @@ namespace DatabaseLayer.Repositories
             }
         }
 
+        public async Task<ResponseResult> PremiumReminderList()
+        {
+            try
+            {
+                DateTime today = DateTime.Now.Date;
+                DateTime next7Days = today.AddDays(7);
+
+                var result = await _dbContext.tbl_InsurancePremium
+                    .Where(o =>
+                        o.Premium_Month.Date <= next7Days // upcoming
+                    )
+                    .Select(o => new
+                    {
+                        o.Id,
+
+                        vehicle = new
+                        {
+                            o.Crane_VehicleId,
+                            o.Crane_Vehicle!.Vehicle_Name,
+                            o.Crane_Vehicle!.Vehicle_No,
+                        },
+
+                        CraneInsurance = new
+                        {
+                            o.Crane_Insurance!.Insurance_Company,
+                            o.Crane_Insurance!.Policy_No,
+                            o.Crane_Insurance!.Policy_Type,
+                        },
+
+                        o.Premium_Month,
+
+                        Status = o.Premium_Month.Date < today
+                            ? "Overdue"
+                            : "Upcoming"
+                    })
+                    .OrderBy(o => o.Premium_Month)
+                    .Take(10) // limit for dashboard
+                    .ToListAsync();
+
+                return new ResponseResult("OK", result);
+            }
+            catch (Exception ex)
+            {
+                return new ResponseResult("Fail", ex.Message);
+            }
+        }
+
         public async Task<ResponseResult> SaveInsurance_Premium(Insurance_Premium insurance_premium)
         {
             try
