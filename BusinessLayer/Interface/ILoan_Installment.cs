@@ -16,5 +16,7 @@ namespace BusinessLayer.Interface
         public Task<ResponseResult> ListLoan_Installment();
 
         public Task<ResponseResult> LoanInstallmentReport(DateTime fromDate, DateTime toDate);
+
+        public Task<ResponseResult> LoanInstallmentReminderList();
     }
 }

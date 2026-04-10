@@ -197,5 +197,63 @@ namespace DatabaseLayer.Repositories
             }
         }
 
+        public async Task<ResponseResult> LoanInstallmentReminderList()
+        {
+            try
+            {
+
+                DateTime today = DateTime.Now.Date;
+                DateTime next7Days = today.AddDays(7);
+
+                var result = await _dbContext.tbl_LoanInstallment
+                    .Where(o =>
+                        o.Installment_Date.Date <= next7Days // upcoming
+                    )
+                    .Select(o => new
+                    {
+                        o.Id,
+
+                        vehicle = new
+                        {
+
+                            o.Vehicle_Loan!.Crane_Vehicle!.Vehicle_Name,
+                            o.Vehicle_Loan!.Crane_Vehicle!.Vehicle_No
+                        },
+
+                        VehicleLoan = new
+                        {
+                            o.Vehicle_LoanId,
+                            o.Vehicle_Loan!.Loan_Provider,
+                            o.Vehicle_Loan!.Loan_Amount,
+                            o.Vehicle_Loan!.Monthly_Installment,
+                            o.Vehicle_Loan!.Crane_Vehicle!.Vehicle_Name,
+                            o.Vehicle_Loan!.Crane_Vehicle!.Vehicle_No
+                        },
+                        o.Installment_Date,
+                        o.Amount_Paid,
+                        o.Payment_Method,
+                        o.Receipt_No,
+                        o.Paid_On,
+                        o.Note,
+                        o.Created_At,
+
+                    
+
+                        Status = o.Installment_Date.Date < today
+                            ? "Overdue"
+                            : "Upcoming"
+                    })
+                    .OrderBy(o => o.Installment_Date)
+                    .Take(10) // limit for dashboard
+                    .ToListAsync();
+
+                return new ResponseResult("OK", result);
+            
+            }
+            catch (Exception ex)
+            {
+                return new ResponseResult("Fail", ex.Message);
+            }
+        }
     }
 }
