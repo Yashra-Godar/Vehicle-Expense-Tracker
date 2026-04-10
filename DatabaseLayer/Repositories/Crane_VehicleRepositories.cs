@@ -292,6 +292,7 @@ namespace DatabaseLayer.Repositories
                     result.Import_Date = crane_Vehicle.Import_Date;
                     result.Purchase_Type = crane_Vehicle.Purchase_Type;
                     result.Updated_At = DateTime.Now;
+                    result.Status=crane_Vehicle.Status;
                     result.Remarks=crane_Vehicle.Remarks;
 
                     
