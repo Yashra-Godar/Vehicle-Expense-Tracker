@@ -246,16 +246,67 @@ namespace DatabaseLayer.Repositories
             }
         }
 
+
+        public async Task<ResponseResult> ListInsurance_Premium(int Id)
+        {
+            try
+            {
+                var result = await _dbContext.tbl_InsurancePremium.Where(o=> o.Crane_InsuranceId == Id).Select(o => new
+                {
+                    o.Id,
+                    CraneInsurance = new
+                    {
+                        o.Crane_Insurance!.Insurance_Company,
+                        o.Crane_Insurance!.Policy_No,
+                        o.Crane_Insurance!.Policy_Type,
+                        o.Crane_Insurance!.Created_At,
+                    },
+
+                    vehicle = new
+                    {
+                        o.Crane_VehicleId,
+                        o.Crane_Vehicle!.Vehicle_Name,
+                        o.Crane_Vehicle!.Vehicle_No,
+                        o.Crane_Vehicle!.Max_Lifting_Height,
+                        o.Crane_Vehicle!.Capacity_Tons,
+                        o.Crane_Vehicle!.Make_by,
+                        o.Crane_Vehicle!.Manufacture_Year
+                    },
+                    staff = new
+                    {
+                        o.Staff_MasterId,
+                        o.Staff_Master!.FullName,
+                    },
+                    o.Premium_Month,
+                    o.Payment_Date,
+                    o.Amount_Date,
+                    o.Payment_Mode,
+                    o.Paid_To,
+                    o.Remarks,
+                    o.Created_At
+                }).ToListAsync();
+                return new ResponseResult("OK", result);
+            }
+            catch (Exception ex)
+            {
+                return new ResponseResult("Fail", ex.Message);
+            }
+        }
+
+
         public async Task<ResponseResult> PremiumReminderList()
         {
             try
             {
                 DateTime today = DateTime.Now.Date;
-                DateTime next7Days = today.AddDays(7);
+
+                DateTime startOfMonth = new DateTime(today.Year, today.Month, 1);
+                DateTime endOfMonth = startOfMonth.AddMonths(1).AddDays(-1);
 
                 var result = await _dbContext.tbl_InsurancePremium
                     .Where(o =>
-                        o.Premium_Month.Date <= next7Days // upcoming
+                        o.Premium_Month.Date >= startOfMonth &&
+                        o.Premium_Month.Date <= endOfMonth
                     )
                     .Select(o => new
                     {
@@ -282,7 +333,7 @@ namespace DatabaseLayer.Repositories
                             : "Upcoming"
                     })
                     .OrderBy(o => o.Premium_Month)
-                    .Take(10) // limit for dashboard
+                    .Take(10)
                     .ToListAsync();
 
                 return new ResponseResult("OK", result);

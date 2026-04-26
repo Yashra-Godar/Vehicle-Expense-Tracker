@@ -13,7 +13,7 @@ namespace BusinessLayer.Interface
 
         public Task<ResponseResult> DeleteLoan_Installment(int Id);
 
-        public Task<ResponseResult> ListLoan_Installment();
+        public Task<ResponseResult> ListLoan_Installment(int? Id);
 
         public Task<ResponseResult> LoanInstallmentReport(DateTime fromDate, DateTime toDate);
 

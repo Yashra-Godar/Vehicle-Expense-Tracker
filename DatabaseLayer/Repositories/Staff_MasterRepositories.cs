@@ -184,6 +184,12 @@ namespace DatabaseLayer.Repositories
             if (staff == null)
                 return new ResponseResult("ERROR", "Invalid email or password");
 
+
+            if (!staff.IsActive)
+            {
+                return new ResponseResult("ERROR", "Sorry " + staff.FullName + ", Your Account is In-Active. You cannot Logged In");
+            }
+
             return new ResponseResult("OK", new
             {
                 staff.Id,

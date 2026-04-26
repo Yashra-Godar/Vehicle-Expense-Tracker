@@ -85,20 +85,34 @@ namespace Vehicle_Expense_Tracker.Controllers
         }
 
         [HttpGet("List")]
-        public async Task<IActionResult> ListInsurance_Premium()
+        public async Task<IActionResult> ListInsurance_Premium([FromQuery] int? Id)
         {
             try
             {
-                var result = await _Premium.ListInsurance_Premium();
-                if (result.status == "OK")
+                if (Id != null)
                 {
-                    return Ok(result);
+                    var result = await _Premium.ListInsurance_Premium(Convert.ToInt32(Id));
+                    if (result.status == "OK")
+                    {
+                        return Ok(result);
+                    }
+                    else
+                    {
+                        return BadRequest(result);
+                    }
                 }
                 else
                 {
-                    return BadRequest(result);
+                    var result = await _Premium.ListInsurance_Premium();
+                    if (result.status == "OK")
+                    {
+                        return Ok(result);
+                    }
+                    else
+                    {
+                        return BadRequest(result);
+                    }
                 }
-
             }
             catch (Exception ex)
             {

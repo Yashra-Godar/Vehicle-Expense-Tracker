@@ -89,11 +89,11 @@ namespace Vehicle_Expense_Tracker.Controllers
 
         [HttpGet("List")]
 
-        public async Task<IActionResult> ListLoan_Installment()
+        public async Task<IActionResult> ListLoan_Installment([FromQuery] int? Id)
         {
             try
             {
-                var result = await _Installment.ListLoan_Installment();
+                var result = await _Installment.ListLoan_Installment(Id);
                 if (result.status == "OK")
                 {
                     return Ok(result);
@@ -102,7 +102,6 @@ namespace Vehicle_Expense_Tracker.Controllers
                 {
                     return BadRequest(result);
                 }
-
             }
 
             catch (Exception ex)

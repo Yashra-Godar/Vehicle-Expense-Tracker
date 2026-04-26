@@ -14,6 +14,7 @@ namespace BusinessLayer.Interface
         public Task<ResponseResult> DeleteInsurance_Premium(int Id);
 
         public Task<ResponseResult> ListInsurance_Premium();
+        public Task<ResponseResult> ListInsurance_Premium(int Id);
 
         public Task<ResponseResult> Detail(int Id);
 

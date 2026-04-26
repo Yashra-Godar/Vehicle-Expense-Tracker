@@ -159,14 +159,7 @@ namespace Vehicle_Expense_Tracker.Controllers
             {
                 var result = await _Master.StaffLogin(model.Email, model.Password);
 
-                if (result.status == "OK")
-                {
-                    return Ok(result);
-                }
-                else
-                {
-                    return Unauthorized(result);
-                }
+                return Ok(result);
             }
             catch (Exception ex)
             {

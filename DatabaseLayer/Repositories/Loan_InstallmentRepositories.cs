@@ -39,7 +39,7 @@ namespace DatabaseLayer.Repositories
             }
         }
 
-        public async Task<ResponseResult> ListLoan_Installment()
+        public async Task<ResponseResult> ListLoan_Installment(int? Id)
         {
             try
             {
@@ -69,6 +69,13 @@ namespace DatabaseLayer.Repositories
                     o.Note,
                     o.Created_At
                 }).ToListAsync();
+
+
+                if (Id != null)
+                {
+                    result = result.Where(o => o.VehicleLoan!.Vehicle_LoanId == Id).ToList();
+                }
+
                 return new ResponseResult("OK", result);
             }
 
@@ -201,13 +208,15 @@ namespace DatabaseLayer.Repositories
         {
             try
             {
-
                 DateTime today = DateTime.Now.Date;
-                DateTime next7Days = today.AddDays(7);
+
+                DateTime startOfMonth = new DateTime(today.Year, today.Month, 1);
+                DateTime endOfMonth = startOfMonth.AddMonths(1).AddDays(-1);
 
                 var result = await _dbContext.tbl_LoanInstallment
                     .Where(o =>
-                        o.Installment_Date.Date <= next7Days // upcoming
+                        o.Installment_Date.Date >= startOfMonth &&
+                        o.Installment_Date.Date <= endOfMonth
                     )
                     .Select(o => new
                     {
@@ -215,7 +224,6 @@ namespace DatabaseLayer.Repositories
 
                         vehicle = new
                         {
-
                             o.Vehicle_Loan!.Crane_Vehicle!.Vehicle_Name,
                             o.Vehicle_Loan!.Crane_Vehicle!.Vehicle_No
                         },
@@ -229,6 +237,7 @@ namespace DatabaseLayer.Repositories
                             o.Vehicle_Loan!.Crane_Vehicle!.Vehicle_Name,
                             o.Vehicle_Loan!.Crane_Vehicle!.Vehicle_No
                         },
+
                         o.Installment_Date,
                         o.Amount_Paid,
                         o.Payment_Method,
@@ -237,18 +246,15 @@ namespace DatabaseLayer.Repositories
                         o.Note,
                         o.Created_At,
 
-                    
-
                         Status = o.Installment_Date.Date < today
                             ? "Overdue"
                             : "Upcoming"
                     })
                     .OrderBy(o => o.Installment_Date)
-                    .Take(10) // limit for dashboard
+                    .Take(10)
                     .ToListAsync();
 
                 return new ResponseResult("OK", result);
-            
             }
             catch (Exception ex)
             {

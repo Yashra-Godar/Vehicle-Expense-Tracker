@@ -18,26 +18,36 @@ namespace DatabaseLayer.Repositories
         {
             _dbContext = dbContext;
         }
+
+
         public async Task<ResponseResult> DeleteCrane_Vehicle(int Id)
         {
             try
             {
-                var result=  await _dbContext.tbl_CraneVehicle.FindAsync(Id);
-                if (result != null)
-                {
-                    _dbContext.tbl_CraneVehicle.Remove(result);
-                    await _dbContext.SaveChangesAsync();
-                    return new ResponseResult("OK", "Data Deleted Successfully");
+                var result = await _dbContext.tbl_CraneVehicle.FindAsync(Id);
 
-                }
-                else
+                if (result == null)
                 {
-                    return new ResponseResult("Fail", "Not Found");
+                    return new ResponseResult("Fail", "Vehicle record not found.");
                 }
+
+                _dbContext.tbl_CraneVehicle.Remove(result);
+                await _dbContext.SaveChangesAsync();
+
+                return new ResponseResult("OK", "Data Deleted Successfully");
+            }
+            catch (DbUpdateException ex)
+            {
+                Console.WriteLine($"DbUpdateException caught: {ex.InnerException?.Message}");
+                // This specifically catches Database Integrity violations
+                // 547 is the SQL Server error code for Foreign Key violation
+                return new ResponseResult("Fail",
+                    "This vehicle cannot be deleted because it is being used in other records (e.g., Maintenance or Staff assignments). Please remove those references first.");
             }
             catch (Exception ex)
             {
-                return new ResponseResult("Fail", ex.Message);
+                // General catch for other unexpected errors
+                return new ResponseResult("Fail", "An unexpected error occurred: " + ex.Message);
             }
         }
 
@@ -53,7 +63,7 @@ namespace DatabaseLayer.Repositories
                         o.Staff_MasterId,
                         o.Staff_Master!.FullName,
                     },
-                    
+
                     o.Vehicle_Name,
                     o.Vehicle_No,
                     o.Vehicle_Type!.TypeName,
@@ -67,7 +77,7 @@ namespace DatabaseLayer.Repositories
                     o.Import_From,
                     o.Purchase_Type,
                     o.Remarks,
-                    
+
                 }).FirstOrDefaultAsync();
 
                 if (result != null)
@@ -88,7 +98,7 @@ namespace DatabaseLayer.Repositories
             }
         }
 
-        
+
 
 
 
@@ -111,7 +121,7 @@ namespace DatabaseLayer.Repositories
                         StaffName = v.Staff_Master != null ? v.Staff_Master.FullName : "",
                         CapacityTons = v.Capacity_Tons,
                         PurchaseType = v.Purchase_Type,
-                        Note=v.Note,
+                        Note = v.Note,
 
                         TotalFuelExpense = _dbContext.tbl_FuelExpenses
                             .Where(x => x.Crane_VehicleId == v.Id)
@@ -176,7 +186,7 @@ namespace DatabaseLayer.Repositories
         {
             try
             {
-                var result = await _dbContext.tbl_CraneVehicle.Select(o=> new
+                var result = await _dbContext.tbl_CraneVehicle.Select(o => new
                 {
 
                     o.Id,
@@ -190,7 +200,7 @@ namespace DatabaseLayer.Repositories
                         o.Staff_MasterId,
                         o.Staff_Master!.FullName,
                     },
-                                        
+
                     o.Vehicle_Name,
                     o.Vehicle_No,
                     o.Make_by,
@@ -205,7 +215,7 @@ namespace DatabaseLayer.Repositories
                     o.Purchase_Type,
                     o.Created_At
 
-                    
+
                 }).ToListAsync();
                 return new ResponseResult("OK", result);
             }
@@ -216,7 +226,7 @@ namespace DatabaseLayer.Repositories
 
         }
 
-        public async  Task<ResponseResult> SaveCrane_Vehicle(Crane_Vehicle crane_Vehicle)
+        public async Task<ResponseResult> SaveCrane_Vehicle(Crane_Vehicle crane_Vehicle)
         {
             try
             {
@@ -231,7 +241,7 @@ namespace DatabaseLayer.Repositories
                     error.Add("Staff_MasterId does not exist");
                 }
                 var result = await _dbContext.tbl_CraneVehicle.ToListAsync();
-                if (result.Any(o=>o.Vehicle_No==crane_Vehicle.Vehicle_No)) 
+                if (result.Any(o => o.Vehicle_No == crane_Vehicle.Vehicle_No))
                 {
                     error.Add("Vehicle_No already exist");
                 }
@@ -253,50 +263,51 @@ namespace DatabaseLayer.Repositories
             }
         }
 
-        
-            
-                        
-
-                    
 
 
-        
+
+
+
+
+
+
 
         public async Task<ResponseResult> UpdateCrane_Vehicle(int Id, Crane_Vehicle crane_Vehicle)
         {
             try
             {
 
-                var result =  await _dbContext.tbl_CraneVehicle.FindAsync(Id);
+                var result = await _dbContext.tbl_CraneVehicle.FindAsync(Id);
                 if (result != null)
                 {
-                    if (!await _dbContext.tbl_Vehicles.AnyAsync(o => o.Id == crane_Vehicle.Vehicle_TypeId)) {
-                        return new ResponseResult("Fail","Vehicle_Type Id not exists");
+                    if (!await _dbContext.tbl_Vehicles.AnyAsync(o => o.Id == crane_Vehicle.Vehicle_TypeId))
+                    {
+                        return new ResponseResult("Fail", "Vehicle_Type Id not exists");
                     }
                     if (!await _dbContext.tbl_Staff_Master.AnyAsync(o => o.Id == crane_Vehicle.Staff_MasterId))
                     {
                         return new ResponseResult("Fail", "Staff_MasterId not exists");
                     }
-                    
+
                     result.Vehicle_TypeId = crane_Vehicle.Vehicle_TypeId;
-                    result.Staff_MasterId=crane_Vehicle.Staff_MasterId;
+                    result.Staff_MasterId = crane_Vehicle.Staff_MasterId;
                     result.Vehicle_No = crane_Vehicle.Vehicle_No;
                     result.Vehicle_Name = crane_Vehicle.Vehicle_Name;
-                    result.Make_by=crane_Vehicle.Make_by;
+                    result.Make_by = crane_Vehicle.Make_by;
                     result.Model = crane_Vehicle.Model;
-                    result.Manufacture_Year=crane_Vehicle.Manufacture_Year;
-                    result.Capacity_Tons=crane_Vehicle.Capacity_Tons;
+                    result.Manufacture_Year = crane_Vehicle.Manufacture_Year;
+                    result.Capacity_Tons = crane_Vehicle.Capacity_Tons;
                     result.Max_Lifting_Height = crane_Vehicle.Max_Lifting_Height;
                     result.Import_From = crane_Vehicle.Import_From;
-                    result.Note=crane_Vehicle.Note;
+                    result.Note = crane_Vehicle.Note;
                     result.Import_Date = crane_Vehicle.Import_Date;
                     result.Purchase_Type = crane_Vehicle.Purchase_Type;
                     result.Updated_At = DateTime.Now;
-                    result.Status=crane_Vehicle.Status;
-                    result.Remarks=crane_Vehicle.Remarks;
+                    result.Status = crane_Vehicle.Status;
+                    result.Remarks = crane_Vehicle.Remarks;
 
-                    
-                   
+
+
                     await _dbContext.SaveChangesAsync();
                     return new ResponseResult("OK", "Data Updated Successfully");
                 }
@@ -336,17 +347,17 @@ namespace DatabaseLayer.Repositories
                             o.Staff_MasterId,
                             o.Staff_Master!.FullName,
                         },
-                       o.Vehicle_No,
-                       o.Vehicle_Name,
-                       o.Model, 
-                       o.Manufacture_Year,
-                       o.Max_Lifting_Height,
-                       o.Capacity_Tons,
-                       o.Make_by,
-                       o.Import_From,
-                       o.Import_Date,
-                       o.Purchase_Type,
-                       o.Note
+                        o.Vehicle_No,
+                        o.Vehicle_Name,
+                        o.Model,
+                        o.Manufacture_Year,
+                        o.Max_Lifting_Height,
+                        o.Capacity_Tons,
+                        o.Make_by,
+                        o.Import_From,
+                        o.Import_Date,
+                        o.Purchase_Type,
+                        o.Note
                     })
                     .ToListAsync();
 
